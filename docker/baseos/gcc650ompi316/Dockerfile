@@ -10,18 +10,23 @@ LABEL maintainer.name="Shawn P. Serbin" \
       author.email="sserbin@bnl.gov" \
       description="GCC-based image loaded with necessary dependencies for building HLM/HLM-FATES images"
 
+RUN useradd -ms /bin/bash clmuser
+RUN useradd -ms /bin/bash elmuser
+
 # Set a few variables that can be used to control the docker build
 ARG OPENMPI_VERSION=3.1.6
 ARG HDF5_VERSION=1.12.1
 ARG NETCDF_VERSION=4.8.1
 ARG NETCDF_FORTRAN_VERSION=4.5.4
+ARG PYTHON3_VERSION=3.8.13
 
 # echo back options
-RUN echo $NCPUS
-RUN echo $OPENMPI_VERSION
-RUN echo $HDF5_VERSION
-RUN echo $NETCDF_VERSION
-RUN echo $NETCDF_FORTRAN_VERSION
+RUN echo $NCPUS \
+    && echo $OPENMPI_VERSION \
+    && echo $HDF5_VERSION \
+    && echo $NETCDF_VERSION \
+    && echo $NETCDF_FORTRAN_VERSION \
+    && echo PYTHON3_VERSION
 
 ENV PATH=/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
@@ -82,6 +87,22 @@ ENV LANGUAGE en_US.UTF-8
 ## check locales
 RUN locale -a
 
+## Add python3.8 and modules needed for tools
+RUN cd / \
+    && wget https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PYTHON3_VERSION}.tgz \
+    && tar xvf Python-${PYTHON3_VERSION}.tgz \
+    && cd Python-${PYTHON3_VERSION} \
+    && ./configure --enable-optimizations \
+    && make -j4 \
+    && make altinstall \
+    && cd / \
+    && python3.8 --version \
+    && python3.8 -m pip install --upgrade pip \
+    && python3.8 -m pip install ssl configparser numpy scipy matplotlib cftime pandas netCDF4 xarray scitools3 \
+    && cd / \
+    && rm -r Python-${PYTHON3_VERSION} \
+    && rm Python-${PYTHON3_VERSION}.tgz
+
 ## compile openMPI
 RUN echo "*** Compiling openMPI " ${OPENMPI_VERSION}
 RUN cd / \
@@ -102,27 +123,69 @@ RUN cd / \
 RUN echo "*** Compiling Expat XML parser"
 RUN cd / \
     && wget https://github.com/libexpat/libexpat/releases/download/R_2_4_7/expat-2.4.7.tar.bz2 \
-    && tar -xvjf expat-2.2.6.tar.bz2 \
-    && cd expat-2.2.6 \
+    && tar -xvjf expat-2.4.7.tar.bz2 \
+    && cd expat-2.4.7 \
     && ./configure \
     && make \
     && make install \
     && cd / \
-    && rm -r expat-2.2.6 \
-    && rm expat-2.2.6.tar.bz2
+    && rm -r expat-2.4.7 \
+    && rm expat-2.4.7.tar.bz2
 
 ## HDF5
 RUN echo "*** Compiling HDF5 " ${HDF5_VERSION}
+#https://support.hdfgroup.org/ftp/HDF5/releases/
 RUN cd / \
     && mkdir -p /usr/local/hdf5 \
-    && wget https://s3.amazonaws.com/hdf-wordpress-1/wp-content/uploads/manual/HDF5/HDF5_1_10_4/hdf5-1.10.4.tar.gz \
-    && tar -zxvf hdf5-1.10.4.tar.gz \
-    && cd hdf5-1.10.4 \
+    && wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.1/src/hdf5-1.12.1.tar.gz \
+    && tar -zxvf hdf5-1.12.1.tar.gz \
+    && cd hdf5-1.12.1 \
     && CC=mpicc ./configure --enable-fortran --enable-parallel --prefix=/usr/local/hdf5 \
     && make \
     && make install \
     && export PATH=/usr/local/hdf5/bin:$PATH \
     && export LD_LIBRARY_PATH=/usr/local/hdf5/lib/libhdf5 \
     && cd / \
-    && rm -r hdf5-1.10.4 \
-    && rm hdf5-1.10.4.tar.gz
+    && rm -r hdf5-1.12.1 \
+    && rm hdf5-1.12.1.tar.gz
+
+## netCDF
+RUN echo "*** Compiling netCDF " ${NETCDF_VERSION}
+RUN cd / \
+    && mkdir -p /usr/local/netcdf \
+    && wget https://downloads.unidata.ucar.edu/netcdf-c/4.8.1/netcdf-c-4.8.1.tar.gz \
+    && tar -zxvf netcdf-c-4.8.1.tar.gz \
+    && cd netcdf-c-4.8.1 \
+    && export H5DIR=/usr/local/hdf5 \
+    && export NCDIR=/usr/local/netcdf \
+    && CC=mpicc CPPFLAGS=-I${H5DIR}/include LDFLAGS=-L${H5DIR}/lib ./configure --enable-parallel-tests --prefix=${NCDIR} \
+    && make \
+    && make install \
+    && export PATH=/usr/local/netcdf/bin:$PATH \
+    && export LD_LIBRARY_PATH=/usr/local/netcdf/lib \
+    && cd / \
+    && rm -r netcdf-c-4.8.1 \
+    && rm netcdf-c-4.8.1.tar.gz
+
+## "Compile netCDF-Fortran"
+RUN echo "*** Compiling netCDF fortran " ${NETCDF_FORTRAN_VERSION}
+RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-4.5.4.tar.gz \
+    && tar -zxvf netcdf-fortran-4.5.4.tar.gz \
+    && cd netcdf-fortran-4.5.4 \
+    && export NCDIR=/usr/local/netcdf \
+    && export NFDIR=/usr/local/netcdf \
+    && CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=${NFDIR} --enable-parallel-tests \
+    && make \
+    && make install \
+    && cd / \
+    && rm -r netcdf-fortran-4.5.4 \
+    && rm netcdf-fortran-4.5.4.tar.gz
+
+## Final cleanup
+#RUN cd / \
+#    && rm -r netcdf-c-4.6.2 \
+#    && rm netcdf-c-4.6.2.tar.gz \
+#    && rm -r netcdf-fortran-4.4.4 \
+#    && rm netcdf-fortran-4.4.4.tar.gz
+
+### EOF
