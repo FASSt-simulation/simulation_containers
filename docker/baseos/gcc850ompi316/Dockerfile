@@ -68,7 +68,10 @@ RUN apt-get update -y \
     apt-utils \
     ftp \
     apt-transport-https \
+    libssl-dev \
     openssl \
+    libncurses5-dev \
+    libsqlite3-dev \
     locales \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean all
@@ -97,8 +100,8 @@ RUN cd / \
     && make altinstall \
     && cd / \
     && python3.8 --version \
-    && python3.8 -m pip install --upgrade pip \
-    && python3.8 -m pip install ssl configparser numpy scipy matplotlib cftime pandas netCDF4 xarray scitools3 \
+    && python3.8 -m pip3 install --upgrade pip \
+    && python3.8 -m pip3 install ssl configparser numpy scipy matplotlib cftime pandas netCDF4 xarray scitools3 \
     && cd / \
     && rm -r Python-${PYTHON3_VERSION} \
     && rm Python-${PYTHON3_VERSION}.tgz
