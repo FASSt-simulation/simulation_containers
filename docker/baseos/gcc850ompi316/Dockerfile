@@ -17,7 +17,7 @@ ARG OPENMPI_VERSION=3.1.6
 ARG HDF5_VERSION=1.12.1
 ARG NETCDF_VERSION=4.8.1
 ARG NETCDF_FORTRAN_VERSION=4.5.4
-ARG PYTHON3_VERSION=3.8.13
+ARG PYTHON3_VERSION=3.9.12
 
 # echo back options
 RUN echo $NCPUS \
@@ -90,7 +90,7 @@ ENV LANGUAGE en_US.UTF-8
 ## check locales
 RUN locale -a
 
-## Add python3.8 and modules needed for tools
+## Add python3.9 and modules needed for tools
 RUN cd / \
     && wget https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PYTHON3_VERSION}.tgz \
     && tar xvf Python-${PYTHON3_VERSION}.tgz \
@@ -99,9 +99,9 @@ RUN cd / \
     && make -j4 \
     && make altinstall \
     && cd / \
-    && python3.8 --version \
-    && python3.8 -m pip3 install --upgrade pip \
-    && python3.8 -m pip3 install ssl configparser numpy scipy matplotlib cftime pandas netCDF4 xarray scitools3 \
+    && python3.9 --version \
+    && python3.9 -m pip3 install --upgrade pip \
+    && python3.9 -m pip3 install ssl configparser numpy scipy matplotlib cftime pandas netCDF4 xarray scitools3 \
     && cd / \
     && rm -r Python-${PYTHON3_VERSION} \
     && rm Python-${PYTHON3_VERSION}.tgz

@@ -91,6 +91,7 @@ ENV LANGUAGE en_US.UTF-8
 RUN locale -a
 
 ## Add python3.8 and modules needed for tools
+## need to check what libs we actually want
 RUN cd / \
     && wget https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PYTHON3_VERSION}.tgz \
     && tar xvf Python-${PYTHON3_VERSION}.tgz \
@@ -100,8 +101,9 @@ RUN cd / \
     && make altinstall \
     && cd / \
     && python3.8 --version \
-    && python3.8 -m pip3 install --upgrade pip \
-    && python3.8 -m pip3 install ssl configparser numpy scipy matplotlib cftime pandas netCDF4 xarray scitools3 \
+    && python3.8 -m pip install ssl \
+    && python3.8 -m pip install --upgrade pip \
+    && python3.8 -m pip install ssl configparser numpy scipy matplotlib cftime pandas netCDF4 xarray scitools3 \
     && cd / \
     && rm -r Python-${PYTHON3_VERSION} \
     && rm Python-${PYTHON3_VERSION}.tgz
@@ -183,6 +185,9 @@ RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-
     && cd / \
     && rm -r netcdf-fortran-4.5.4 \
     && rm netcdf-fortran-4.5.4.tar.gz
+
+#RUN apt-get install -y --no-install-recommends ca-certificates
+#RUN update-ca-certificates
 
 ## Final cleanup
 #RUN cd / \
