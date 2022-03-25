@@ -62,9 +62,9 @@ RUN cd / \
     && mkdir -p ctsm_run_scripts \
     && cd ctsm_run_scripts \
     && wget https://raw.githubusercontent.com/serbinsh/ctsm_containers/master/ctsm_run_scripts/create_case_1pt_example_USNR1.sh \
-    && wget https://raw.githubusercontent.com/serbinsh/ctsm_containers/master/ctsm_run_scripts/create_case_ctsm_1pt_custom_site.sh \
+#    && wget https://raw.githubusercontent.com/serbinsh/ctsm_containers/master/ctsm_run_scripts/create_case_ctsm_1pt_custom_site.sh \
     && chmod 775 create_case_1pt_example_USNR1.sh \
-    && chmod 775 create_case_ctsm_1pt_custom_site.sh \
+#    && chmod 775 create_case_ctsm_1pt_custom_site.sh \
     && cd /.cime \
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/ctsm/cime_config/model_config \ 
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/ctsm/cime_config/config_compilers.xml \
