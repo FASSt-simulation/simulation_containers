@@ -13,4 +13,4 @@ Docker hub: https://hub.docker.com/orgs/fasstsimulation
 <br>
 
 2) Pull down the latest version of the basic CTSM Docker container <br>
-```docker pull serbinsh/ctsm_containers:ctsm-release-clm5.0.15```
+```docker pull fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18```
