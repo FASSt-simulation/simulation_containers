@@ -1,0 +1,20 @@
+NOTES
+
+
+## Add python3.8 and modules needed for tools
+## need to check what libs we actually want
+RUN cd / \
+    && wget https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PYTHON3_VERSION}.tgz \
+    && tar xvf Python-${PYTHON3_VERSION}.tgz \
+    && cd Python-${PYTHON3_VERSION} \
+    && ./configure --enable-optimizations \
+    && make -j4 \
+    && make altinstall \
+    && cd / \
+    && python3.8 --version \
+    && python3.8 -m pip install ssl \
+    && python3.8 -m pip install --upgrade pip \
+    && python3.8 -m pip install ssl configparser numpy scipy matplotlib cftime pandas netCDF4 xarray scitools3 \
+    && cd / \
+    && rm -r Python-${PYTHON3_VERSION} \
+    && rm Python-${PYTHON3_VERSION}.tgz

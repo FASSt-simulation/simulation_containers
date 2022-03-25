@@ -90,22 +90,6 @@ ENV LANGUAGE en_US.UTF-8
 ## check locales
 RUN locale -a
 
-## Add python3.9 and modules needed for tools
-RUN cd / \
-    && wget https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PYTHON3_VERSION}.tgz \
-    && tar xvf Python-${PYTHON3_VERSION}.tgz \
-    && cd Python-${PYTHON3_VERSION} \
-    && ./configure --enable-optimizations \
-    && make -j4 \
-    && make altinstall \
-    && cd / \
-    && python3.9 --version \
-    && python3.9 -m pip3 install --upgrade pip \
-    && python3.9 -m pip3 install ssl configparser numpy scipy matplotlib cftime pandas netCDF4 xarray scitools3 \
-    && cd / \
-    && rm -r Python-${PYTHON3_VERSION} \
-    && rm Python-${PYTHON3_VERSION}.tgz
-
 ## compile openMPI
 RUN echo "*** Compiling openMPI " ${OPENMPI_VERSION}
 RUN cd / \
