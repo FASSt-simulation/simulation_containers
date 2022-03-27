@@ -18,3 +18,18 @@ RUN cd / \
     && cd / \
     && rm -r Python-${PYTHON3_VERSION} \
     && rm Python-${PYTHON3_VERSION}.tgz
+
+
+Jupyter
+https://jupyter-docker-stacks.readthedocs.io/en/latest/
+
+http://127.0.0.1:10000/lab
+
+http://127.0.0.1:10000/lab
+
+
+follow this for building our own custom jupyter-lab environment for running CTSM/ELM containers
+and analyzing output
+https://herrmann.tech/en/blog/2021/02/08/how-to-build-custom-environment-for-jupyter-in-docker.html
+
+
