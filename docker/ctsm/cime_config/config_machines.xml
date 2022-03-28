@@ -9,7 +9,7 @@
       <OS>linux</OS>
       <COMPILERS>gnu</COMPILERS>
       <MPILIBS>openmpi,mpi-serial</MPILIBS>
-      <CIME_OUTPUT_ROOT>/ctsm_output</CIME_OUTPUT_ROOT>
+      <CIME_OUTPUT_ROOT>/output</CIME_OUTPUT_ROOT>
       <DIN_LOC_ROOT>/inputdata</DIN_LOC_ROOT>
       <!--<DIN_LOC_ROOT>/data/Model_Data/cesm_input_datasets</DIN_LOC_ROOT>-->
       <DIN_LOC_ROOT_CLMFORC>/inputdata/atm/datm7</DIN_LOC_ROOT_CLMFORC>

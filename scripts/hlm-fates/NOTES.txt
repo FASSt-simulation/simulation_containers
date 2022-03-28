@@ -14,15 +14,14 @@ https://escomp.github.io/ctsm-docs/versions/release-clm5.0/html/users_guide/sett
 
 # e.g. Prelim simple run
 docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v ~/scratch/ctsm_fates:/output \
--v ~/Data/cesm_input_datasets:/inputdata -v ~/Data/GitHub/simulation_containers/scripts/hlm-fates:/scripts/ \
+-v ~/Data/cesm_input_datasets:/inputdata -v ~/Data/GitHub/simulation_containers/scripts/hlm-fates/run_scripts:/scripts/ \
 fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18 /scripts/ctsm_docker_1x1brazil.sh --compset=I1PtClm50SpGs \
 --start_year='2010-01-01' --num_years=5 --run_type=startup --met_start=2010 --met_end=2014 --output_vars=output_vars.txt \
 --output_freq=H --descname=1x1brazil --debug=FALSE
 
 docker run -t -i --hostname=docker --user $(id -u):$(id -g) --volume ~/Data/cesm_input_datasets:/inputdata \
 --volume ~/scratch/ctsm_fates:/output fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18 \
-/bin/sh -c 'cd /output/1x1brazil.CLM50.docker.C24515c5-F33f9b4f.2022-03-28_13-14-34 && ./case.submit'
-
+/bin/sh -c 'cd /output/1x1brazil.CLM50.docker.C24515c5-F33f9b4f.2022-03-28_13-58-45 && ./case.submit'
 
 
 # 1pt examples: CLM build-namelist - valid values for res (Horizontal resolutions
@@ -34,6 +33,34 @@ Note: 0.1x0.1, 0.5x0.5, 5x5min, 10x10min, 3x3min and 0.33x0.33 are only used for
               ne120np4 ne240np4 wus12 us20
       Default = 1.9x2.5
      (NOTE: resolution and mask and other settings may influence what the default is)
+
+
+
+
+# quick and dirty US-NR1 example
+docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v ~/Data/cesm_input_datasets:/inputdata \
+-v ~/scratch/ctsm_fates:/output -v ~/Data/GitHub/simulation_containers/scripts/hlm-fates/run_scripts:/scripts/ \
+fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18 /scripts/create_case_1pt_example_USNR1.sh '1998-01-01' 2 output_vars.txt
+
+docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v ~/Data/cesm_input_datasets:/inputdata \
+-v ~/scratch/ctsm_fates:/output fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18 \
+/bin/sh -c 'cd /output/CLM5_1648478180/ && ./case.submit'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # OLD OSF

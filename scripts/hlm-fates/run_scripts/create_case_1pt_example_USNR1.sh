@@ -1,15 +1,19 @@
 #!/bin/bash
 
-WORKDIR=/ctsm_run_scripts/
+WORKDIR=/scripts/
 cd $WORKDIR
 echo $PWD
 
+# =======================================================================================
 export start_year=$1
 echo "Start year: "${start_year}
 export num_years=$2
 echo "Number of years: "${num_years}
+export output_vars=$3
+echo "Output vars filename: "${output_vars}
 
 # Setup simulation options
+export RUN_SITE=USNR1
 export MODEL_SOURCE=/ctsm
 export MODEL_VERSION=CLM5
 export CLM_HASH=`(cd ${MODEL_SOURCE};git log -n 1 --pretty=%h)`
@@ -18,10 +22,22 @@ export MACH=${HOSTNAME}
 export RES=f09_g16
 #export COMP=I2000Clm50BgcCrop
 export COMP=2000_DATM%GSWP3v1_CLM50%BGC-CROP_SICE_SOCN_MOSART_SGLC_SWAV
-export CASEROOT=/ctsm_output
+export CASEROOT=/output
 export date_var=$(date +%s)
 export CASE_NAME=${CASEROOT}/${MODEL_VERSION}_${date_var}
+# =======================================================================================
 
+
+# =======================================================================================
+# Set outputs
+out_vars=$(cat "$output_vars")
+out_vars="${out_vars//\\/}"
+
+echo "Selected output variables: "${out_vars}
+# =======================================================================================
+
+
+# =======================================================================================
 # setup case
 rm -rf ${CASE_NAME}
 
@@ -65,13 +81,13 @@ echo "*** Modifying xmls  ***"
 ./xmlchange -a CLM_CONFIG_OPTS='-nofire'
 ./xmlchange ATM_DOMAIN_FILE=domain.lnd.fv0.9x1.25_NR1.nc
 ./xmlchange LND_DOMAIN_FILE=domain.lnd.fv0.9x1.25_NR1.nc
-./xmlchange ATM_DOMAIN_PATH=/ctsm_example_data/
-./xmlchange LND_DOMAIN_PATH=/ctsm_example_data/
+./xmlchange ATM_DOMAIN_PATH=/example_inputs/${RUN_SITE}
+./xmlchange LND_DOMAIN_PATH=/example_inputs/${RUN_SITE}
 ./xmlchange MOSART_MODE=NULL
 
 # update input file location for other needed run files - this makes sure the files get stored in main output directory mapped to host computer
-./xmlchange DIN_LOC_ROOT_CLMFORC=/data/atm/datm7
-./xmlchange DIN_LOC_ROOT=/data/
+./xmlchange DIN_LOC_ROOT_CLMFORC=/inputdata/atm/datm7
+./xmlchange DIN_LOC_ROOT=/inputdata/
 
 # turn off debug
 ./xmlchange DEBUG=FALSE
@@ -99,11 +115,11 @@ echo "*** Running case.setup ***"
 ./case.setup
 
 cat >> user_nl_clm <<EOF
-fsurdat = '/ctsm_example_data/surfdata_0.9x1.25_NR1.nc'
-hist_empty_htapes = .true.
-hist_fincl1 = 'NEP','NPP','GPP','TOTECOSYSC','TOTVEGC','TLAI','EFLX_LH_TOT_R','TBOT','FSDS'
-hist_mfilt             = 8760
-hist_nhtfrq            = -1
+fsurdat = '/example_inputs/${RUN_SITE}/surfdata_0.9x1.25_NR1.nc'
+hist_empty_htapes   = .true.
+hist_fincl1         = ${out_vars}
+hist_mfilt          = 8760
+hist_nhtfrq         = -1
 EOF
 
 ## define met params
@@ -116,7 +132,7 @@ mapalgo = 'nn', 'nn', 'nn'
 EOF
 
 ## define stream files and edit
-cp /ctsm_example_data/user_datm.streams.txt.CLMGSWP3v1.* .
+cp /example_inputs/${RUN_SITE}/user_datm.streams.txt.CLMGSWP3v1.* .
 
 echo *** Build case ***
 ./case.build
