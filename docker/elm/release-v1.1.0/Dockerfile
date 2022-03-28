@@ -9,10 +9,10 @@ LABEL maintainer.name="Shawn P. Serbin" \
       author.name="Shawn P. Serbin" \
       author.email="sserbin@bnl.gov" \
       description="ELM host land model" \
-      version.hlm="v1.0.0" \
+      version.hlm="v1.1.0" \
       version.baseos="gcc8.5"
 
-ARG ELM_BRANCH='v1.0.0'
+ARG ELM_BRANCH='v1.1.0'
 RUN echo $ELM_BRANCH
 
 # setting gmake
@@ -64,6 +64,7 @@ RUN git -c http.sslVerify=false clone -b ${ELM_BRANCH} --single-branch --depth 1
     && sed -i 's|git@github.com:|https://github.com/|g' .gitmodules \
     && git submodule update --init --recursive \
     && cd /.cime \
+    && echo $ELM_BRANCH \
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config \
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_compilers.xml \
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_machines.xml \
@@ -94,8 +95,8 @@ RUN cd /E3SM/cime/scripts \
     && ./xmlchange NTASKS=1 \
     && ./xmlchange DIN_LOC_ROOT=$PWD \
     && cd /output/f19_g16.ICLM45 \
-    && ./case.setup
-    #&& ./case.build
+    && ./case.setup \
+    && ./case.build
 
 ## Remove test build
 RUN cd /output \
