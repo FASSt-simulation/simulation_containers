@@ -6,10 +6,10 @@
     <CPPDEFS>
       <append MODEL="gptl"> -DHAVE_VPRINTF -DHAVE_GETTIMEOFDAY -DHAVE_BACKTRACE </append>
     </CPPDEFS>
-    <FFLAGS>
+    <!--<FFLAGS>
       <append DEBUG="FALSE">-fno-unsafe-math-optimizations</append>
       <append DEBUG="TRUE"> -g -fbacktrace -fbounds-check -ffpe-trap=invalid,zero,overflow</append>
-    </FFLAGS>
+    </FFLAGS>-->
     <SLIBS>
       <append> -L$ENV{HDF5_HOME}/lib -lhdf5_fortran -lhdf5 -lhdf5_hl -lhdf5hl_fortran </append>
       <append> -L$ENV{NETCDF_PATH}/lib/ -lnetcdff -lnetcdf -lcurl -lblas -llapack </append>
