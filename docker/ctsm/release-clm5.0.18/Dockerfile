@@ -30,8 +30,8 @@ RUN echo $CTSM_BRANCH
 RUN cd / \
     && mkdir -p inputdata \
     && mkdir -p data \
-    && mkdir -p ctsm_example_data \
-    && mkdir -p ctsm_output \
+    && mkdir -p example_inputs \
+    && mkdir -p output \
     && mkdir -p scripts \
     && mkdir -p tools \
     && mkdir -p baselines \
@@ -39,8 +39,8 @@ RUN cd / \
     && mkdir -p home/$USER/.cime \
     && chown $USER inputdata \
     && chown $USER data \
-    && chown $USER ctsm_example_data \
-    && chown $USER ctsm_output \
+    && chown $USER example_inputs \
+    && chown $USER output \
     && chown $USER scripts \
     && chown $USER tools \
     && chown $USER baselines \
@@ -70,18 +70,10 @@ RUN cd / \
 
 ## Create US-NR1 example data directory
 RUN cd / \
-    && cd ctsm_example_data \
+    && cd example_inputs \
     && wget https://github.com/serbinsh/ctsm_containers/raw/master/ctsm_example_data/USNR1/USNR1_CTSM_Example_Data.tar.gz \
     && tar -zxvf USNR1_CTSM_Example_Data.tar.gz \
     && rm USNR1_CTSM_Example_Data.tar.gz
-
-## Create tools directory for helper functions
-#RUN cd / \
-#    && cd tools \
-#    && wget https://raw.githubusercontent.com/serbinsh/ctsm_containers/master/tools/create_single_point/python3/config.cfg \
-#    && wget https://raw.githubusercontent.com/serbinsh/ctsm_containers/master/tools/create_single_point/create_GSWP3.0.5d.v1_single_point_forcing_data.py \
-#    && chmod 775 config.cfg \
-#    && chmod 775 create_GSWP3.0.5d.v1_single_point_forcing_data.py
 
 ## setup clmuser to use with docker
 RUN export USER=$USER
