@@ -6,7 +6,7 @@
 # --- User selectable options are provided below
 #
 # Example usage:
-# ./ctsm_fates_docker_1x1brazil.sh --compset=I2000Clm50BgcCropGs \
+# ./ctsm_fates_docker_1x1brazil.sh --compset=I1PtClm50SpGs \
 # --start_year='2010-01-01' --num_years=5 --run_type=startup --met_start=2010 \
 # --met_end=2014 --output_vars=output_vars.txt --output_freq=H --descname=single_site_brazil \
 # --debug=FALSE
@@ -88,7 +88,7 @@ esac
 done
 
 # check for missing inputs and set defaults
-compset="${compset:-I2000Clm50BgcCropGs}"
+compset="${compset:-I1PtClm50SpGs}"
 start_year="${start_year:-'2004-01-01'}"
 num_years="${num_years:-2}"
 rtype="${rtype:-startup}"

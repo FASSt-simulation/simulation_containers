@@ -59,10 +59,11 @@ RUN cd / \
     && cd ctsm_parameter_files \
     && wget --no-check-certificate https://svn-ccsm-inputdata.cgd.ucar.edu/trunk/inputdata/lnd/clm2/paramdata/clm5_params.c171117.nc \
     && cd / \
-    && mkdir -p ctsm_run_scripts \
-    && cd ctsm_run_scripts \
-    && wget https://raw.githubusercontent.com/serbinsh/ctsm_containers/master/ctsm_run_scripts/create_case_1pt_example_USNR1.sh \
+    && cd scripts \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/run_scripts/create_case_1pt_example_USNR1.sh \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/run_scripts/ctsm_docker_1x1brazil.sh \
     && chmod 775 create_case_1pt_example_USNR1.sh \
+    && chmod 775 ctsm_docker_1x1brazil.sh \
     && cd /.cime \
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/ctsm/cime_config/config \ 
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/ctsm/cime_config/config_compilers.xml \
@@ -71,7 +72,7 @@ RUN cd / \
 ## Create US-NR1 example data directory
 RUN cd / \
     && cd example_inputs \
-    && wget https://github.com/serbinsh/ctsm_containers/raw/master/ctsm_example_data/USNR1/USNR1_CTSM_Example_Data.tar.gz \
+    && wget https://github.com/FASSt-simulation/simulation_containers/raw/main/example_inputs/USNR1_CTSM_Example_Data.tar.gz \
     && tar -zxvf USNR1_CTSM_Example_Data.tar.gz \
     && rm USNR1_CTSM_Example_Data.tar.gz
 
