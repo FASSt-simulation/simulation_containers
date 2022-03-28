@@ -18,6 +18,10 @@ RUN echo $ELM_BRANCH
 # setting gmake
 RUN ln -s /usr/bin/make /usr/bin/gmake
 
+# Download public key for github.com
+RUN mkdir ~/.ssh && \
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
+
 # Setup environment variables.  This is necessary for os.environ calls from case.py in CIME
 ENV USER=modeluser
 
@@ -26,10 +30,9 @@ ENV USER=modeluser
 #RUN echo "export USER=${USER}" > /etc/environment
 
 # Add new group, user, and user directory with user permissions
-RUN groupadd -r dockerusers && \
-    useradd -u 1001 -g dockerusers $USER && \
-    mkdir /home/$USER && \
-    chown $USER:dockerusers /home/$USER
+RUN groupadd -r dockerusers \
+    && useradd -ms /bin/bash $USER -u 1001 -g dockerusers \
+    && chown $USER:dockerusers /home/$USER
 
 ## create data mount point in container
 ## could change this to /mnt or something more generic in machines files
@@ -54,9 +57,18 @@ RUN cd / \
     && chown $USER /home/$USER/.cime
 
 ## Checkout ELM model
-#RUN echo "*** Checkout ELM model"
-#RUN cd / \
-#    && git -c http.sslVerify=false clone -b ${ELM_BRANCH} --single-branch --depth 1 https://github.com/E3SM-Project/E3SM.git \
-#    && cd /E3SM \
-#    && git config http.sslVerify false \
-#    && git tag \
+RUN echo "*** Checkout ELM model"
+RUN cd /
+RUN --mount=type=ssh git clone -b ${ELM_BRANCH} --single-branch --depth 1 https://github.com/E3SM-Project/E3SM.git \
+    && cd /E3SM \
+    && git submodule update --init --recursive \
+    && git tag
+#    && chown -R $USER:dockerusers /home/$USER/E3SM && \
+
+
+git -c http.sslVerify=false clone -b ${ELM_BRANCH} --single-branch --depth 1 https://github.com/E3SM-Project/E3SM.git
+
+sed -i 's|git@github.com:|https://github.com/|g' .gitmodules
+
+git config --global ssh.sslVerify false
+git submodule update --init --recursive
