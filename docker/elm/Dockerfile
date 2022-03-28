@@ -22,14 +22,14 @@ RUN ln -s /usr/bin/make /usr/bin/gmake
 ENV USER=modeluser
 
 # Add user directory structure.  This is necessary for CIME
-RUN useradd -ms /bin/bash $USER -u 9001
-RUN echo "export USER=${USER}" > /etc/environment
+#RUN useradd -ms /bin/bash $USER -u 9001
+#RUN echo "export USER=${USER}" > /etc/environment
 
 # Add new group, user, and user directory with user permissions
 RUN groupadd -r dockerusers && \
-    useradd -u 1001 -g dockerusers modeluser && \
-    mkdir /home/modeluser && \
-    chown modeluser:dockerusers /home/modeluser
+    useradd -u 1001 -g dockerusers $USER && \
+    mkdir /home/$USER && \
+    chown $USER:dockerusers /home/$USER
 
 ## create data mount point in container
 ## could change this to /mnt or something more generic in machines files

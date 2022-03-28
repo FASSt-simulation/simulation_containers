@@ -10,10 +10,6 @@ LABEL maintainer.name="Shawn P. Serbin" \
       author.email="sserbin@bnl.gov" \
       description="GCC-based image loaded with necessary dependencies for building HLM/HLM-FATES images"
 
-# do this in the model container not here I think
-#RUN useradd -ms /bin/bash clmuser
-#RUN useradd -ms /bin/bash elmuser
-
 # Set a few variables that can be used to control the docker build
 ARG OPENMPI_VERSION=3.1.6
 ARG HDF5_VERSION=1.12.1
