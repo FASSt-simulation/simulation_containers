@@ -7,8 +7,8 @@ cd /output/f19_g16.ICLM45
 ./xmlchange RUNDIR=${PWD}/run 
 ./xmlchange EXEROOT=${PWD}/bld
 ./xmlchange NTASKS=1 
-./xmlchange DIN_LOC_ROOT_CLMFORC=/data/atm/datm7
-./xmlchange DIN_LOC_ROOT=/data/
+./xmlchange DIN_LOC_ROOT_CLMFORC=/inputdata/atm/datm7
+./xmlchange DIN_LOC_ROOT=/inputdata/
 cd /output/f19_g16.ICLM45
 ./case.setup
 ./case.build

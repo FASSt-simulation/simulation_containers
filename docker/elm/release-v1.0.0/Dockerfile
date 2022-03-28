@@ -79,8 +79,8 @@ RUN export USER=${USER}
 
 # copy in some example scripts
 RUN cd scripts \
-    && wget https://raw.githubusercontent.com/serbinsh/elm_containers/master/elm_run_scripts/basic_f19_g16_ICLM45_test_case.sh \
-    && chmod 775 basic_f19_g16_ICLM45_test_case.sh
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_f19_g16_ICLM45_test_case_e3sm1.0.0.sh \
+    && chmod 775 basic_f19_g16_ICLM45_test_case_e3sm1.0.0.sh
 
 ## Build example case as a test
 RUN cd /E3SM/cime/scripts \
