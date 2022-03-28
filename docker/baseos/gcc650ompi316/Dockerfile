@@ -25,8 +25,7 @@ RUN echo $NCPUS \
     && echo $OPENMPI_VERSION \
     && echo $HDF5_VERSION \
     && echo $NETCDF_VERSION \
-    && echo $NETCDF_FORTRAN_VERSION \
-    && echo PYTHON3_VERSION
+    && echo $NETCDF_FORTRAN_VERSION
 
 ENV PATH=/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH

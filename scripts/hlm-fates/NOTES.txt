@@ -38,9 +38,17 @@ Note: 0.1x0.1, 0.5x0.5, 5x5min, 10x10min, 3x3min and 0.33x0.33 are only used for
 
 
 # quick and dirty US-NR1 example
+docker pull fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18
+docker run -t -i --hostname=docker --user $(id -u):$(id -g) fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18
+
 docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v ~/Data/cesm_input_datasets:/inputdata \
 -v ~/scratch/ctsm_fates:/output -v ~/Data/GitHub/simulation_containers/scripts/hlm-fates/run_scripts:/scripts/ \
 fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18 /scripts/create_case_1pt_example_USNR1.sh '1998-01-01' 2 output_vars.txt
+
+docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v ~/Data/cesm_input_datasets:/inputdata \
+-v ~/scratch/ctsm_fates:/output fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18 \
+/scripts/create_case_1pt_example_USNR1.sh '1998-01-01' 2 output_vars.txt
+
 
 docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v ~/Data/cesm_input_datasets:/inputdata \
 -v ~/scratch/ctsm_fates:/output fasstsimulation/ctsm-builds:ctsm-release-clm5.0.18 \

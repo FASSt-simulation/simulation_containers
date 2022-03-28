@@ -9,9 +9,6 @@ LABEL maintainer.name="Shawn P. Serbin" \
       author.email="sserbin@bnl.gov" \
       description="GCC-based image loaded with necessary dependencies for building HLM/HLM-FATES images"
 
-RUN useradd -ms /bin/bash clmuser
-RUN useradd -ms /bin/bash elmuser
-
 # Set a few variables that can be used to control the docker build
 ARG OPENMPI_VERSION=3.1.6
 ARG HDF5_VERSION=1.12.1
@@ -23,8 +20,7 @@ RUN echo $NCPUS \
     && echo $OPENMPI_VERSION \
     && echo $HDF5_VERSION \
     && echo $NETCDF_VERSION \
-    && echo $NETCDF_FORTRAN_VERSION \
-    && echo PYTHON3_VERSION
+    && echo $NETCDF_FORTRAN_VERSION
 
 # set path variables
 ENV PATH=/usr/local/bin:$PATH
