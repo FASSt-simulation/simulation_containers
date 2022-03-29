@@ -88,8 +88,8 @@ RUN cd scripts \
     && chmod 775 basic_f19_g16_IGSWCLM45_test_case_e3sm1.1.0.sh
 
 ## Build example case as a test
-RUN export date_var=$(date +%s) \
-    && export CASE_NAME=/output/f19_g16.IGSWCLM45.${date_var} \
+RUN cd /E3SM/cime/scripts \
+    && export CASE_NAME=/output/f19_g16.IGSWCLM45 \
     && cd /E3SM/cime/scripts \
     && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWCLM45 --mach docker --compiler gnu \
     && cd ${CASE_NAME} \
@@ -105,5 +105,5 @@ RUN export date_var=$(date +%s) \
 
 ## Remove test build
 RUN cd /output \
-    && rm -r ${CASE_NAME}
+    && rm -r /output/f19_g16.IGSWCLM45
 ## END
