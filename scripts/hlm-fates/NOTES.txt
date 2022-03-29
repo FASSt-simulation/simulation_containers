@@ -1,5 +1,11 @@
 # COMPSETS
 https://www.cesm.ucar.edu/models/cesm2/config/2.0.0/compsets.html
+# elm compsets - master
+https://github.com/E3SM-Project/E3SM/blob/master/components/elm/cime_config/config_compsets.xml
+# elm 1.1.0
+https://github.com/E3SM-Project/E3SM/blob/v1.1.0/components/clm/cime_config/config_compsets.xml
+https://github.com/E3SM-Project/E3SM/blob/v1.1.0/components/clm/cime_config/testdefs/testlist_clm.xml
+
 
 # custom single point data
 https://escomp.github.io/ctsm-docs/versions/release-clm5.0/html/users_guide/running-single-points/running-single-point-configurations.html#creating-your-own-single-point-dataset

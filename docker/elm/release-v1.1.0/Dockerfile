@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------
-# Debian container
-# CTSM land model docker container
+# Debian container - gcc8.5
+# E3SM/ELM land model docker container
 # ----------------------------------------------------------------------
 
 FROM fasstsimulation/baseos:gcc850ompi316-latest
@@ -80,24 +80,30 @@ RUN export USER=${USER}
 
 # copy in some example scripts
 RUN cd scripts \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_f19_g16_ICLM45_test_case_e3sm1.0.0.sh \
-    && chmod 775 basic_f19_g16_ICLM45_test_case_e3sm1.0.0.sh
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_1x1_1x1_smallvilleIA_ICLM45BGCCROP_test_case_e3sm1.1.0.sh \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_1x1_vancouverCAN_I1PTCLM45_test_case_e3sm1.1.0.sh \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_f19_g16_IGSWCLM45_test_case_e3sm1.1.0.sh \
+    && chmod 775 basic_1x1_1x1_smallvilleIA_ICLM45BGCCROP_test_case_e3sm1.1.0.sh \
+    && chmod 775 basic_1x1_vancouverCAN_I1PTCLM45_test_case_e3sm1.1.0.sh \
+    && chmod 775 basic_f19_g16_IGSWCLM45_test_case_e3sm1.1.0.sh
 
 ## Build example case as a test
-RUN cd /E3SM/cime/scripts \
-#    && echo $(head -1 /etc/hosts | cut -f1) docker >> /etc/hosts \
-    && ./create_newcase --case /output/f19_g16.ICLM45 --res f19_g16 --compset ICLM45 --mach docker --compiler gnu \
-    && cd /output/f19_g16.ICLM45 \
-    && ./xmlchange DATM_CLMNCEP_YR_END=1972 \
+RUN export date_var=$(date +%s) \
+    && export CASE_NAME=/output/f19_g16.IGSWCLM45.${date_var} \
+    && cd /E3SM/cime/scripts \
+    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWCLM45 --mach docker --compiler gnu \
+    && cd ${CASE_NAME} \
+    && ./xmlchange DATM_CLMNCEP_YR_END=1995 \
     && ./xmlchange PIO_TYPENAME=netcdf \
     && ./xmlchange RUNDIR=${PWD}/run \
     && ./xmlchange EXEROOT=${PWD}/bld \
     && ./xmlchange NTASKS=1 \
     && ./xmlchange DIN_LOC_ROOT=$PWD \
-    && cd /output/f19_g16.ICLM45 \
+    && cd ${CASE_NAME} \
     && ./case.setup \
     && ./case.build
 
 ## Remove test build
 RUN cd /output \
-    && rm -r f19_g16.ICLM45/
+    && rm -r ${CASE_NAME}
+## END
