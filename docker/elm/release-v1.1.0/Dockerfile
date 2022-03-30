@@ -80,7 +80,7 @@ RUN export USER=${USER}
 
 # copy in some example scripts
 RUN cd scripts \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_1x1_1x1_smallvilleIA_ICLM45BGCCROP_test_case_e3sm1.1.0.sh \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_1x1_smallvilleIA_ICLM45BGCCROP_test_case_e3sm1.1.0.sh \
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_1x1_vancouverCAN_I1PTCLM45_test_case_e3sm1.1.0.sh \
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_f19_g16_IGSWCLM45_test_case_e3sm1.1.0.sh \
     && chmod 775 basic_1x1_1x1_smallvilleIA_ICLM45BGCCROP_test_case_e3sm1.1.0.sh \
