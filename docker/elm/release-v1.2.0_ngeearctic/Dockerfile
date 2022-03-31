@@ -58,13 +58,13 @@ RUN git -c http.sslVerify=false clone -b ${ELM_BRANCH} --single-branch --depth 1
     && git submodule update --init --recursive \
     && cd /.cime \
     && echo $ELM_BRANCH \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_compilers.xml \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_machines.xml \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config_ngeearctic/config \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config_ngeearctic/config_compilers.xml \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config_ngeearctic/config_machines.xml \
     && cd /home/$USER/.cime \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_compilers.xml \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_machines.xml \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config_ngeearctic/config \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config_ngeearctic/config_compilers.xml \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config_ngeearctic/config_machines.xml \
     && cd /
 
 # Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
