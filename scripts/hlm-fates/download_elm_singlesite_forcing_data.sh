@@ -11,7 +11,7 @@
 # USER OPTIONS
 # path to "single_site" directory within main CESM data directory located on the host
 # machine
-cesm_data_dir=~/Data/single_point_cesm_input_datasets
+cesm_data_dir=/inputdata
 mkdir -p ${cesm_data_dir}
 # =======================================================================================
 
