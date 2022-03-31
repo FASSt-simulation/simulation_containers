@@ -34,6 +34,7 @@ RUN cd / \
     && mkdir -p output \
     && mkdir -p scripts \
     && mkdir -p tools \
+    && mkdir -p tools/cprnc \
     && mkdir -p baselines \
     && mkdir -p .cime \
     && mkdir -p home/$USER/.cime \
@@ -42,11 +43,13 @@ RUN cd / \
     && chown $USER output \
     && chown $USER scripts \
     && chown $USER tools \
+    && chown $USER tools/cprnc \
     && chown $USER baselines \
     && chown $USER .cime \
     && chown $USER /home/$USER/.cime
 
 ## Checkout ELM model
+## /root/.cime/config_machines.xml
 RUN echo "*** Checkout ELM model"
 RUN cd /
 RUN git -c http.sslVerify=false clone -b ${ELM_BRANCH} --single-branch --depth 1 https://github.com/E3SM-Project/E3SM.git \
@@ -70,6 +73,15 @@ RUN git -c http.sslVerify=false clone -b ${ELM_BRANCH} --single-branch --depth 1
 # Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
 USER ${USER}
 RUN export USER=${USER}
+
+# compile cprnc - requires setting of hostname OR proving a duplicate of the config_machines.xml but with localhost
+#RUN hostname \
+#    && echo $USER \
+#    && cd /E3SM/cime/tools/cprnc \
+#    && CIMEROOT=../.. ../configure --macros-format=Makefile --mpilib=mpi-serial \
+#    && CIMEROOT=../.. source ./.env_mach_specific.sh && make \
+#    && cp cprnc /tools/cprnc \
+#    && chown -R $USER:dockerusers /tools/cprnc
 
 # copy in some example scripts
 RUN cd scripts \
