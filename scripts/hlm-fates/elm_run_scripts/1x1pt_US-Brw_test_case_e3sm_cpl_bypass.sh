@@ -182,11 +182,21 @@ echo " "
 #hist_mfilt             = 8760
 #hist_nhtfrq            = -1
 #EOF
+#hist_empty_htapes = .false. ! If true, turns off default history output (of everything at subgrid level. If false, first file is defaults
+#hist_dov2xy = .true., .false. ! True means subgrid-level output, false means patch (PFT) level output
+#hist_nhtfrq = 0, 0 ! Output frequency. 0 is monthly, -24 is daily, 1 is timestep
+#hist_mfilt  = 12 12 ! History file writing frequency: number of points from hist_nhtfrq
+#hist_avgflag_pertape = 'A', 'A', 'A' ! A for averaging, I for instantaneous
+#!flanduse_timeseries = '/lustre/or-hydra/cades-ccsi/proj-shared/project_acme/cesminput_ngee/lnd/clm2/surfdata_map/landuse.timeseries_51x63pt_kougarok-NGEE_TransA_simyr1850_c181115-sub12.nc'
+#!flanduse_timeseries = '/lustre/or-hydra/cades-ccsi/proj-shared/project_acme/cesminput_ngee/lnd/clm2/surfdata_map/landuse.timeseries_51x63pt_kougarok-NGEE_TransA_simyr1850_c181115default.nc'
+#! Include this line to use variable soil depths:
+#use_var_soil_thick = .TRUE.
 
 # define output variables and output frequency
 echo "*** Update user_nl_clm ***"
 echo " "
 cat >> user_nl_clm <<EOF
+!paramfile =/path/to/custom/paramfile.nc
 hist_empty_htapes       = .true.
 hist_fincl1             = ${out_vars}
 hist_mfilt              = 8760
@@ -197,7 +207,15 @@ aero_file               = '/inputdata/atm/cam/chem/trop_mozart_aero/aero/aerosol
 CO2_file                = '/inputdata/atm/datm7/CO2/fco2_datm_1765-2007_c100614.nc'
 nyears_ad_carbon_only   = 25
 spinup_mortality_factor = 10
+! Include this line to use variable soil depths:
+!use_var_soil_thick = .TRUE.
 EOF
+
+# Bypass the coupler
+echo "*** Invoking coupler bypass ***"
+echo " "
+sed -i 's|CPPDEFS := $(CPPDEFS)  -DFORTRANUNDERSCORE -DNO_R16 -DCPRGNU|CPPDEFS := $(CPPDEFS)  -DFORTRANUNDERSCORE -DNO_R16 -DCPRGNU -DCPL_BYPASS|g' Macros.make
+sed -i 's|set(CPPDEFS "${CPPDEFS}  -DFORTRANUNDERSCORE -DNO_R16 -DCPRGNU")|set(CPPDEFS "${CPPDEFS}  -DFORTRANUNDERSCORE -DNO_R16 -DCPRGNU -DCPL_BYPASS")|g' Macros.cmake
 
 # build case
 echo "*** Build case ***"

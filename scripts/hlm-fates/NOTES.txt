@@ -17,6 +17,12 @@ https://escomp.github.io/ctsm-docs/versions/release-clm5.0/html/users_guide/sett
 https://escomp.github.io/ctsm-docs/versions/release-clm5.0/html/users_guide/setting-up-and-running-a-case/master_list_file.html
 
 
+# build namelist options
+https://www.cesm.ucar.edu/models/cesm1.2/clm/models/lnd/clm/doc/UsersGuide/x1230.html
+https://escomp.github.io/ctsm-docs/versions/release-clm5.0/html/users_guide/setting-up-and-running-a-case/customizing-the-clm-configuration.html?highlight=clm_bldnml_opts
+https://escomp.github.io/ctsm-docs/versions/release-clm5.0/html/users_guide/running-special-cases/running-with-irrigation.html
+
+
 
 # e.g. Prelim simple run
 docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v ~/scratch/ctsm_fates:/output \
