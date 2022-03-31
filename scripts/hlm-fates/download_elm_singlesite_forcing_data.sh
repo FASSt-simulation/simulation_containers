@@ -12,7 +12,7 @@
 # path to "single_site" directory within main CESM data directory located on the host
 # machine
 cesm_data_dir=~/Data/single_point_cesm_input_datasets
-#mkdir -p ${cesm_data_dir}
+mkdir -p ${cesm_data_dir}
 # =======================================================================================
 
 # =======================================================================================
@@ -20,9 +20,15 @@ echo "*** Downloading and extracting forcing data ***"
 
 cd ${cesm_data_dir}
 wget https://github.com/fmyuan/pt-e3sm-inputdata/archive/refs/heads/master.zip
-unzip master.zip 
-rm master.zip
-mv pt-e3sm-inputdata-master ${cesm_data_dir}
+unzip master.zip
+cd pt-e3sm-inputdata-master
+mv * ../
+cd ..
+
+echo "*** Removing zip file ***"
+rm -rf pt-e3sm-inputdata-master
+#rm -f ${cesm_data_dir}/master.zip
+rm -f master.zip
 
 # go in and extract remaining tar files
 cd ${cesm_data_dir}/lnd/clm2/firedata
