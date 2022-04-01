@@ -28,7 +28,7 @@ docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v /Users/sserbin/Da
 fasstsimulation/elm-builds:release-v1.2.0_ngeearctic-latest /scripts/download_elm_singlesite_forcing_data.sh
 ```
 
-5) Run the test case example.
+5) Build the test case example.
 
 Define your localhost:docker paths. Replace: <br>
 
@@ -43,4 +43,15 @@ docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v /Users/sserbin/Da
 /scripts/./1x1pt_US-Brw_test_case_e3sm.sh --case_root=/output \
 --site_name=1x1pt_US-Brw --start_year='1985-01-01' --num_years=16 --output_vars=/scripts/output_vars.txt \
 --met_start=1985 --met_end=2015 --resolution=CLM_USRDAT --compset=I1850CNPRDCTCBC
+```
+
+6) Run the test case example.
+
+Replace 1x1pt_US-Brw.ELM.I1850CNPRDCTCBC.1648738374 with the folder name created in step 5 <br>
+
+Then past the command below into your terminal to start the run <br>
+
+```
+docker run -t -i --hostname=docker --user $(id -u):$(id -g) -v /Users/sserbin/Data/single_point_cesm_input_datasets:/inputdata \
+-v ~/scratch/ctsm_fates:/output test_ngee_elm /bin/sh -c 'cd /output/1x1pt_US-Brw.ELM.I1850CNPRDCTCBC.1648738374/ && ./case.submit'
 ```
