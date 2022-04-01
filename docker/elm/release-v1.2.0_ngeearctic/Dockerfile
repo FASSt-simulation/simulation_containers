@@ -111,5 +111,6 @@ RUN cd /E3SM/cime/scripts \
     && ./case.build
     
 ## Remove test build
-RUN rm -rf /output/f19_g16.IGSWCLM45
+RUN cd / \
+    && rm -rf /output/f19_g16.IGSWCLM45
 ## END
