@@ -27,9 +27,20 @@ http://127.0.0.1:10000/lab
 
 http://127.0.0.1:10000/lab
 
+make sure you include the web token!!
+
+docker run -p 10000:8888 docker-jupyter-extensible:latest
+
 
 follow this for building our own custom jupyter-lab environment for running CTSM/ELM containers
 and analyzing output
 https://herrmann.tech/en/blog/2021/02/08/how-to-build-custom-environment-for-jupyter-in-docker.html
 
+https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html
 
+https://dev.to/juanbelieni/how-to-run-jupyterlab-on-docker-4n80
+
+
+https://github.com/jupyter/docker-stacks/blob/master/scipy-notebook/Dockerfile
+
+https://faun.pub/set-current-host-user-for-docker-container-4e521cef9ffc 
