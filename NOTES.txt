@@ -44,3 +44,17 @@ https://dev.to/juanbelieni/how-to-run-jupyterlab-on-docker-4n80
 https://github.com/jupyter/docker-stacks/blob/master/scipy-notebook/Dockerfile
 
 https://faun.pub/set-current-host-user-for-docker-container-4e521cef9ffc 
+
+MORE GOOD INFO IN THIS!
+https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html
+
+ARG NB_USER=jovyan
+ARG NB_UID=1000
+ENV USER ${NB_USER}
+ENV NB_UID ${NB_UID}
+ENV HOME /home/${NB_USER}
+
+RUN adduser --disabled-password \
+    --gecos "Default user" \
+    --uid ${NB_UID} \
+    ${NB_USER}
