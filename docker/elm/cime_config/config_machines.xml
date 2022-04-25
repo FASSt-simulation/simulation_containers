@@ -15,7 +15,7 @@
       <DIN_LOC_ROOT_CLMFORC>/inputdata/atm/datm7</DIN_LOC_ROOT_CLMFORC>
       <DOUT_S_ROOT>$CIME_OUTPUT_ROOT/archive/$CASE</DOUT_S_ROOT>
       <BASELINE_ROOT>/baselines</BASELINE_ROOT>
-      <CCSM_CPRNC>/cesm_tools/cprnc/cprnc</CCSM_CPRNC>
+      <CCSM_CPRNC>/tools/cprnc</CCSM_CPRNC>
       <GMAKE>make</GMAKE>
       <!-- May want to modify this. Will require users to have 4 CPUs avail-->
       <GMAKE_J>4</GMAKE_J>
@@ -40,6 +40,8 @@
       <environment_variables>
         <env name="HDF5_HOME">/usr/local/hdf5</env>
         <env name="NETCDF_PATH">/usr/local/netcdf</env>
+        <env name="NETCDF_C_PATH">/usr/local/netcdf</env>
+        <env name="NETCDF_FORTRAN_PATH">/usr/local/netcdf</env>
     </environment_variables>
    </machine>
 </config_machines>
