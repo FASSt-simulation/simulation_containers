@@ -58,3 +58,9 @@ RUN adduser --disabled-password \
     --gecos "Default user" \
     --uid ${NB_UID} \
     ${NB_USER}
+
+
+
+
+SSH keys and builds - need to sort out how to use ssh keys for checking out submodules
+https://docs.docker.com/docker-hub/builds/#build-repositories-with-linked-private-submodules

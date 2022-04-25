@@ -52,7 +52,7 @@ RUN cd / \
 ## /root/.cime/config_machines.xml
 RUN echo "*** Checkout ELM model"
 RUN cd /
-RUN git clone -b ${ELM_BRANCH} --single-branch --depth 1 https://github.com/E3SM-Project/E3SM.git \
+RUN git clone -b ${ELM_BRANCH} --single-branch --depth 1 git@github.com:E3SM-Project/E3SM.git \
     && cd /E3SM \
     && git log \
     && git branch \
