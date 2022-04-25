@@ -15,6 +15,8 @@ LABEL maintainer.name="Shawn P. Serbin" \
 ARG ELM_BRANCH='v2.0.0'
 RUN echo $ELM_BRANCH
 
+ARG SSH_PRIVATE_KEY
+
 # setting gmake
 RUN ln -s /usr/bin/make /usr/bin/gmake
 
