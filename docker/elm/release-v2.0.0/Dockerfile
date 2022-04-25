@@ -16,6 +16,11 @@ ARG ELM_BRANCH='v2.0.0'
 RUN echo $ELM_BRANCH
 
 ARG SSH_PRIVATE_KEY
+#RUN mkdir /root/.ssh/
+#RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
+#RUN touch /root/.ssh/known_hosts
+#RUN ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
+RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 # setting gmake
 RUN ln -s /usr/bin/make /usr/bin/gmake
