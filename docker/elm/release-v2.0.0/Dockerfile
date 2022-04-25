@@ -53,19 +53,50 @@ RUN cd / \
     && chown $USER tools/cprnc \
     && chown $USER baselines \
     && chown $USER .cime \
-    && chown $USER /home/$USER/.cime
+    && chown $USER /home/$USER/.cime \
+    && cd /
 
 ## Checkout ELM model
 ## /root/.cime/config_machines.xml
 RUN echo "*** Checkout ELM model"
-RUN cd /
-#RUN git clone -b ${ELM_BRANCH} --single-branch --depth 1 git@github.com:E3SM-Project/E3SM.git \
-#    && cd /E3SM \
-#   && git log \
-#    && git branch \
-#    && git submodule update --init --recursive \
-#    && cd /E3SM
+COPY e3sm_source/v2.0.0/e3sm_v2.0.0.tar.gz .
+RUN tar -zxvf e3sm_v2.0.0.tar.gz \
+    && rm e3sm_v2.0.0.tar.gz \
+    && cd /E3SM \
+    && git log \
+    && git branch \
+    && cd /.cime \
+    && echo $ELM_BRANCH \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_compilers.xml \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_machines.xml \
+    && cd /home/$USER/.cime \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_compilers.xml \
+    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_machines.xml \
+    && cd /
 
 # Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
-#USER ${USER}
-#RUN export USER=${USER}
+USER ${USER}
+RUN export USER=${USER}
+
+## Build example case as a test
+RUN cd /E3SM/cime/scripts \
+    && export CASE_NAME=/output/f19_g16.IGSWELM \
+    && cd /E3SM/cime/scripts \
+    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWELM --mach docker --compiler gnu \
+    && cd ${CASE_NAME} \
+    && ./xmlchange DATM_CLMNCEP_YR_END=1995 \
+    && ./xmlchange PIO_TYPENAME=netcdf \
+    && ./xmlchange RUNDIR=${PWD}/run \
+    && ./xmlchange EXEROOT=${PWD}/bld \
+    && ./xmlchange NTASKS=1 \
+    && ./xmlchange DIN_LOC_ROOT=$PWD \
+    && cd ${CASE_NAME} \
+    && ./case.setup \
+    && ./case.build
+    
+## Remove test build
+RUN cd / \
+    && rm -rf /output/f19_g16.IGSWCLM45
+## END
