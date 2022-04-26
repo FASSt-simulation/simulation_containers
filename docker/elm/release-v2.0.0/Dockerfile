@@ -54,7 +54,7 @@ RUN cd / \
 ## For now, copy in source code instead of pulling into container; issues with github ssh and submodules
 RUN echo "*** Copy in ELM v2.0.0"
 ## https://www.geeksforgeeks.org/docker-copy-instruction/
-COPY --chown=modeluser:dockerusers e3sm_v2.0.0.tar.gz /.
+COPY --chown=modeluser:dockerusers ./e3sm_source/e3sm_v2.0.0.tar.gz /.
 RUN tar -zxvf e3sm_v2.0.0.tar.gz \
     && rm e3sm_v2.0.0.tar.gz \
     && cd /E3SM \
