@@ -15,15 +15,8 @@ LABEL maintainer.name="Shawn P. Serbin" \
 ARG ELM_BRANCH='v2.0.0'
 RUN echo $ELM_BRANCH
 
-#ARG SSH_PRIVATE_KEY
-#RUN mkdir /root/.ssh/
-#RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
-#RUN touch /root/.ssh/known_hosts
-#RUN ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
-#RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-# setting gmake
-RUN ln -s /usr/bin/make /usr/bin/gmake
+# setting gmake - not sure we need this
+#RUN ln -s /usr/bin/make /usr/bin/gmake
 
 # Setup environment variables.  This is necessary for os.environ calls from case.py in CIME
 ENV USER=modeluser
@@ -58,6 +51,7 @@ RUN cd / \
 
 ## Checkout ELM model
 ## /root/.cime/config_machines.xml
+## For now, copy in source code instead of pulling into container; issues with github ssh and submodules
 RUN echo "*** Checkout ELM model"
 COPY e3sm_source/v2.0.0/e3sm_v2.0.0.tar.gz .
 RUN tar -zxvf e3sm_v2.0.0.tar.gz \
@@ -82,9 +76,9 @@ RUN export USER=${USER}
 
 ## Build example case as a test
 RUN cd /E3SM/cime/scripts \
-    && export CASE_NAME=/output/f19_g16.IGSWELM \
+    && export CASE_NAME=/output/f19_g16.IGSWELMBGC \
     && cd /E3SM/cime/scripts \
-    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWELM --mach docker --compiler gnu \
+    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWELMBGC --mach docker --compiler gnu \
     && cd ${CASE_NAME} \
     && ./xmlchange DATM_CLMNCEP_YR_END=1995 \
     && ./xmlchange PIO_TYPENAME=netcdf \
@@ -95,8 +89,10 @@ RUN cd /E3SM/cime/scripts \
     && cd ${CASE_NAME} \
     && ./case.setup \
     && ./case.build
-    
+
+RUN echo "**ELM test build completed successfully**"
+
 ## Remove test build
 RUN cd / \
-    && rm -rf /output/f19_g16.IGSWCLM45
+    && rm -rf /output/f19_g16.IGSWELMBGC
 ## END
