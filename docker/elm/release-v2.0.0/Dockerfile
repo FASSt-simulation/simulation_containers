@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------
-# Debian container
-# CTSM land model docker container
+# Debian container - gcc8.5
+# E3SM/ELM land model docker container
 # ----------------------------------------------------------------------
 
 FROM fasstsimulation/baseos:gcc850ompi316-latest
@@ -53,7 +53,7 @@ RUN cd / \
 ## /root/.cime/config_machines.xml
 ## For now, copy in source code instead of pulling into container; issues with github ssh and submodules
 RUN echo "*** Copy in ELM v2.0.0"
-COPY e3sm_v2.0.0.tar.gz .
+COPY --chown=modeluser:dockerusers e3sm_v2.0.0.tar.gz .
 RUN tar -zxvf e3sm_v2.0.0.tar.gz \
     && rm e3sm_v2.0.0.tar.gz \
     && cd /E3SM \
