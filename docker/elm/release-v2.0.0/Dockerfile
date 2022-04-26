@@ -52,8 +52,8 @@ RUN cd / \
 ## Checkout ELM model
 ## /root/.cime/config_machines.xml
 ## For now, copy in source code instead of pulling into container; issues with github ssh and submodules
-RUN echo "*** Checkout ELM model"
-COPY e3sm_source/v2.0.0/e3sm_v2.0.0.tar.gz .
+RUN echo "*** Copy in ELM v2.0.0"
+COPY e3sm_v2.0.0.tar.gz .
 RUN tar -zxvf e3sm_v2.0.0.tar.gz \
     && rm e3sm_v2.0.0.tar.gz \
     && cd /E3SM \
@@ -90,7 +90,7 @@ RUN cd /E3SM/cime/scripts \
     && ./case.setup \
     && ./case.build
 
-RUN echo "**ELM test build completed successfully**"
+RUN echo "*** ELM test build completed successfully ***"
 
 ## Remove test build
 RUN cd / \
