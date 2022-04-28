@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo $HOME
 # =======================================================================================
 # ELM create_newcase template for docker container
 # --- This example builds a basic single-site case using default GSWP3 met forcing,
@@ -84,6 +85,10 @@ case $i in
     surfdata_map="${i#*=}"
     shift # past argument with no value
     ;;
+    -rmach=*|--rmachine=*)
+    rmachine="${i#*=}"
+    shift # past argument with no value
+    ;;
     *)
           # unknown option
     ;;
@@ -109,6 +114,7 @@ surfdata_map="${surfdata_map:-surfdata_0.9x1.25_simyr2000_c180404}"
 compset="${compset:-IGSWELMBGC}"
 output_freq="${output_freq:-M}" # M monthly or H hourly
 debug="${debug:-FALSE}"
+rmachine="${rmachine:-docker}"
 #descname="${descname:-siterun}"
 #resolution="${resolution:-0.9x1.25}"
 
@@ -154,10 +160,12 @@ export MODEL_VERSION=ELM
 #export RESOLUTION=${resolution}
 export COMPSET=${compset}
 export CASE_NAME=${CASEROOT}/${SITE_NAME}.${MODEL_VERSION}.${COMPSET}.${date_var}
+export RUN_MACHINE=${rmachine}
 
 echo " "
 cd /E3SM/cime/scripts
-./create_newcase --case ${CASE_NAME} --res ELM_USRDAT --compset ${COMPSET} --mach docker --compiler gnu
+echo "Running create_newcase in: ${PWD}"
+./create_newcase --case ${CASE_NAME} --res ELM_USRDAT --compset ${COMPSET} --mach ${RUN_MACHINE} --compiler gnu
 cd ${CASE_NAME}
 # =======================================================================================
 
