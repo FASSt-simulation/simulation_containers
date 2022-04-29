@@ -261,6 +261,7 @@ echo "RUN_TYPE=${run_type}"
 
 # or to use only a single core per simulation
 #./xmlchange NTASKS=1
+#./xmlchange NTASKS_LND=1,ROOTPE_LND=3,NTHRDS_LND=1
 
 # or none set and that would default to 
 # run command is mpirun  -np 1  -npernode 4 
