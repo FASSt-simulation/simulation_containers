@@ -2,7 +2,7 @@
 # Debian baseOS docker container to use with ELM/CTSM builds
 # ----------------------------------------------------------------------
 
-FROM gcc:8.5
+FROM gcc:9.4
 LABEL maintainer.name="Shawn P. Serbin" \
       maintainer.email="sserbin@bnl.gov" \
       author.name="Shawn P. Serbin" \
@@ -10,7 +10,7 @@ LABEL maintainer.name="Shawn P. Serbin" \
       description="GCC-based image loaded with necessary dependencies for building HLM/HLM-FATES images"
 
 # Set a few variables that can be used to control the docker build
-ARG OPENMPI_VERSION=3.1.6
+ARG OPENMPI_VERSION=4.1.2
 ARG HDF5_VERSION=1.12.1
 ARG NETCDF_VERSION=4.8.1
 ARG NETCDF_FORTRAN_VERSION=4.5.4
@@ -88,7 +88,7 @@ RUN locale -a
 ## compile openMPI
 RUN echo "*** Compiling openMPI " ${OPENMPI_VERSION}
 RUN cd / \
-    && wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${OPENMPI_VERSION}.tar.gz \
+    && wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-${OPENMPI_VERSION}.tar.gz \
     && tar -zxvf openmpi-${OPENMPI_VERSION}.tar.gz \
     && cd openmpi-${OPENMPI_VERSION} \
     && export PATH=/usr/local/bin:$PATH \
@@ -166,12 +166,5 @@ RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-
 ## Install python libraries for OLMT
 RUN pip3 install numpy
 RUN pip3 install netcdf4 scipy
-
-## Final cleanup
-#RUN cd / \
-#    && rm -r netcdf-c-${NETCDF_VERSION} \
-#    && rm netcdf-c-${NETCDF_VERSION}.tar.gz \
-#    && rm -r netcdf-fortran-${NETCDF_FORTRAN_VERSION} \
-#    && rm netcdf-fortran-${NETCDF_FORTRAN_VERSION}.tar.gz
 
 ### EOF

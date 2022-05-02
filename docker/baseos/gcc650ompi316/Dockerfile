@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------
-# Debian baseOS docker container to use with CTSM/ELM builds
+# Debian baseOS docker container to use with ELM/CTSM builds
 # ----------------------------------------------------------------------
 
 FROM gcc:6.5
