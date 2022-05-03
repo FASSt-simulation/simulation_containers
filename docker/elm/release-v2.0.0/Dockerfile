@@ -97,4 +97,9 @@ RUN echo "*** ELM test build completed successfully ***"
 ## Remove test build
 RUN cd / \
     && rm -rf /output/f19_g16.IGSWELMBGC
+
+## Install OLMT tool into the container to use with site or ensemble simulations
+RUN cd /tools \
+    && git -c http.sslVerify=false clone https://github.com/FASSt-simulation/OLMT.git
+
 ## END

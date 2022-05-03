@@ -64,3 +64,41 @@ RUN adduser --disabled-password \
 
 SSH keys and builds - need to sort out how to use ssh keys for checking out submodules
 https://docs.docker.com/docker-hub/builds/#build-repositories-with-linked-private-submodules
+
+
+
+
+OLMT NOTES
+python site_fullrun.py --site US-Dk3 --caseidprefix MYTEST --nyears_ad_spinup 200 --nyears_final_spinup 400 \
+--tstep 1 --cpl_bypass --compiler gnu --mpilib openmpi --gswp3 --model_root /data/sserbin/Modeling/FASSt-simulation/E3SM \
+--spinup_vars --sitegroup AmeriFlux --no_submit \
+--runroot /data2/Model_Output/elm_runs/olmt --machine modex
+
+
+# need to install ncl in container
+conda install -c conda-forge ncl
+
+# on modex
+conda create -p /data2/sserbin/conda_envs/olmt_ncl -c conda-forge ncl python=3.9
+
+https://anaconda.org/conda-forge/ncl
+
+# but how to get ncl installed on the container without creating a conda env?
+
+RUN set -ex \
+   && conda install --quiet --yes \
+   'ncl' \
+   && conda clean --all -f -y
+
+   https://hub.docker.com/r/earthlab/ncl/dockerfile
+
+
+   RUN conda install --yes -c conda-forge ncl
+
+
+   ALSO NEED NCO
+
+   conda install -c conda-forge nco
+
+
+   Also need NCAP from NCO!! 

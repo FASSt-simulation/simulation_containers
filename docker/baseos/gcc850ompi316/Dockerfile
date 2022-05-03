@@ -14,6 +14,9 @@ ARG OPENMPI_VERSION=3.1.6
 ARG HDF5_VERSION=1.12.1
 ARG NETCDF_VERSION=4.8.1
 ARG NETCDF_FORTRAN_VERSION=4.5.4
+#ARG NCO_VERSION=5.0.7
+# install Mariupol version of NCO
+#ARG NCO_VERSION=5.0.6
 
 # echo back options
 RUN echo $NCPUS \
@@ -67,6 +70,10 @@ RUN apt-get update -y \
     openssl \
     libncurses5-dev \
     libsqlite3-dev \
+    gsl-bin \
+    libgsl-dev \
+    flex \
+    nco \
     locales \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean all
@@ -166,6 +173,20 @@ RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-
 ## Install python libraries for OLMT
 RUN pip3 install numpy
 RUN pip3 install netcdf4 scipy
+
+## Install NCO for OLMT - installed with apt-get instead
+#RUN cd / \
+#    && git -c http.sslVerify=false clone -b ${NCO_VERSION} --single-branch --depth 1 https://github.com/nco/nco.git nco_build \
+#    && cd nco_build \
+#    && export NCDIR=/usr/local/netcdf \
+#    #&& CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=/nco \
+#    && CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --enable-udunits2 --enable-netcdf4 --enable-regex --enable-ncap2 --enable-gsl \
+#    && make \
+#    && make install \
+#    && cd / \
+#    && rm -rf nco_build
+
+#RUN export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 ## Final cleanup
 #RUN cd / \
