@@ -16,18 +16,10 @@ ARG ELM_BRANCH='v1.2.0'
 RUN echo $ELM_BRANCH
 
 # setting gmake
-RUN ln -s /usr/bin/make /usr/bin/gmake
-
-# Download public key for github.com
-#RUN mkdir ~/.ssh && \
-#    ssh-keyscan github.com >> ~/.ssh/known_hosts
+#RUN ln -s /usr/bin/make /usr/bin/gmake
 
 # Setup environment variables.  This is necessary for os.environ calls from case.py in CIME
 ENV USER=modeluser
-
-# Add user directory structure.  This is necessary for CIME
-#RUN useradd -ms /bin/bash $USER -u 9001
-#RUN echo "export USER=${USER}" > /etc/environment
 
 # Add new group, user, and user directory with user permissions
 RUN groupadd -r dockerusers \
@@ -42,6 +34,7 @@ RUN cd / \
     && mkdir -p output \
     && mkdir -p scripts \
     && mkdir -p tools \
+    && mkdir -p tools/cprnc \
     && mkdir -p baselines \
     && mkdir -p .cime \
     && mkdir -p home/$USER/.cime \
@@ -50,9 +43,11 @@ RUN cd / \
     && chown $USER output \
     && chown $USER scripts \
     && chown $USER tools \
+    && chown $USER tools/cprnc \
     && chown $USER baselines \
     && chown $USER .cime \
-    && chown $USER /home/$USER/.cime
+    && chown $USER /home/$USER/.cime \
+    && cd /
 
 ## Checkout ELM model
 RUN echo "*** Checkout ELM model"
@@ -74,20 +69,14 @@ RUN git -c http.sslVerify=false clone -b ${ELM_BRANCH} --single-branch --depth 1
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_machines.xml \
     && cd /
 
+# provide a symlink between ncap and ncap2 for OLMT
+RUN ln -s /usr/bin/ncap2 /usr/bin/ncap
+
 # Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
+RUN chown $USER:dockerusers -R /E3SM
+RUN chmod -R 777 /E3SM
 USER ${USER}
 RUN export USER=${USER}
-
-# copy in some example scripts
-RUN cd scripts \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_1x1_smallvilleIA_ICLM45BGCCROP_test_case_e3sm1.1.0.sh \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_1x1_vancouverCAN_I1PTCLM45_test_case_e3sm1.1.0.sh \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_f19_g16_IGSWCLM45_test_case_e3sm1.1.0.sh \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/basic_1x1_brazil_ICLM45BGC_test_case_e3sm1.2.0.sh \
-    && chmod 775 basic_1x1_smallvilleIA_ICLM45BGCCROP_test_case_e3sm1.1.0.sh \
-    && chmod 775 basic_1x1_vancouverCAN_I1PTCLM45_test_case_e3sm1.1.0.sh \
-    && chmod 775 basic_f19_g16_IGSWCLM45_test_case_e3sm1.1.0.sh \
-    && chmod 775 basic_1x1_brazil_ICLM45BGC_test_case_e3sm1.2.0.sh
 
 ## Build example case as a test
 RUN cd /E3SM/cime/scripts \
@@ -105,7 +94,21 @@ RUN cd /E3SM/cime/scripts \
     && ./case.setup \
     && ./case.build
 
+RUN echo "*** ELM test build completed successfully ***"
+
 ## Remove test build
 RUN cd /output \
     && rm -r /output/f19_g16.IGSWCLM45
+
+## Install OLMT tool into the container to use with site or ensemble simulations
+RUN cd /tools \
+    && git -c http.sslVerify=false clone -b fasst_branch --single-branch --depth 1 https://github.com/FASSt-simulation/OLMT.git
+
+RUN chown $USER:dockerusers -R /tools/OLMT \
+    && chmod -R 777 /tools/OLMT
+
+USER ${USER}
+RUN export USER=${USER}
+#ENV USER=modeluser
+
 ## END

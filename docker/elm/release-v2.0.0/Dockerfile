@@ -74,6 +74,7 @@ RUN ln -s /usr/bin/ncap2 /usr/bin/ncap
 
 # Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
 RUN chown $USER:dockerusers /E3SM
+RUN chmod -R 777 /E3SM
 USER ${USER}
 RUN export USER=${USER}
 
@@ -108,5 +109,6 @@ RUN chown $USER:dockerusers -R /tools/OLMT \
 
 USER ${USER}
 RUN export USER=${USER}
+#ENV USER=modeluser
 
 ## END
