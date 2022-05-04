@@ -15,9 +15,6 @@ LABEL maintainer.name="Shawn P. Serbin" \
 ARG ELM_BRANCH='v2.0.0'
 RUN echo $ELM_BRANCH
 
-# setting gmake - not sure we need this
-#RUN ln -s /usr/bin/make /usr/bin/gmake
-
 # Setup environment variables.  This is necessary for os.environ calls from case.py in CIME
 ENV USER=modeluser
 
@@ -72,6 +69,9 @@ RUN tar -zxvf e3sm_v2.0.0.tar.gz \
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config/config_machines.xml \
     && cd /
 
+# provide a symlink between ncap and ncap2 for OLMT
+RUN ln -s /usr/bin/ncap2 /usr/bin/ncap
+
 # Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
 RUN chown $USER:dockerusers /E3SM
 USER ${USER}
@@ -103,8 +103,8 @@ RUN cd / \
 RUN cd /tools \
     && git -c http.sslVerify=false clone -b fasst_branch --single-branch --depth 1 https://github.com/FASSt-simulation/OLMT.git
 
-RUN chown $USER tools/OLMT \
-    && chmod -R 777 tools/OLMT
+RUN chown $USER:dockerusers -R /tools/OLMT \
+    && chmod -R 777 /tools/OLMT
 
 USER ${USER}
 RUN export USER=${USER}
