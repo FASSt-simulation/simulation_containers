@@ -107,11 +107,13 @@ RUN set -ex \
 docker run -t -i --rm --hostname=docker --user root fasstsimulation/baseos:gcc850ompi316-latest
 
 docker run -t -i --rm --hostname=docker --user $(id -u):$(id -g) \
--v /Volumes/data/Model_Data/cesm_input_datasets:/inputdata fasstsimulation/elm-builds:release-v2.0.0-latest
+-v /Volumes/data/Model_Data/cesm_input_datasets:/inputdata \
+-v /Volumes/data2/Model_Output:/output fasstsimulation/elm-builds:release-v2.0.0-latest
 
-python3 site_fullrun.py --site US-Dk3 --caseidprefix MYTEST --nyears_ad_spinup 200 --nyears_final_spinup 400 \
+# quick and dirty example testing with docker
+python site_fullrun.py --site US-Dk3 --caseidprefix MYTEST --nyears_ad_spinup 200 --nyears_final_spinup 400 \
 --tstep 1 --cpl_bypass --compiler gnu --mpilib openmpi --gswp3 --model_root /E3SM --spinup_vars --sitegroup AmeriFlux --no_submit \
---ccsm_input /inputdata --runroot /output/olmt --machine docker
+--ccsm_input /inputdata --caseroot /output/elm/olmt_cases --runroot /output/olmt/testing --np 2 --machine docker
 
 
 

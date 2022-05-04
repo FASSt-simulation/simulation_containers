@@ -102,4 +102,10 @@ RUN cd / \
 RUN cd /tools \
     && git -c http.sslVerify=false clone -b fasst_branch --single-branch --depth 1 https://github.com/FASSt-simulation/OLMT.git
 
+RUN chown $USER tools/OLMT \
+    && chmod -R 777 tools/OLMT
+
+USER ${USER}
+RUN export USER=${USER}
+
 ## END
