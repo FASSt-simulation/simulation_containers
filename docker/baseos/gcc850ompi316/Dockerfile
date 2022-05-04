@@ -60,6 +60,8 @@ RUN apt-get update -y \
     libudunits2-0 \
     libudunits2-dev \
     udunits-bin \
+    python2 \
+    python2-dev \
     python3 \
     python3-dev \
     python3-pip \
@@ -91,6 +93,13 @@ ENV LANGUAGE en_US.UTF-8
 
 ## check locales
 RUN locale -a
+
+## get python2 pip
+RUN echo "*** Python2 PIP "
+RUN cd / \
+    && curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py \
+    && python2 get-pip.py \
+    && cd /
 
 ## compile openMPI
 RUN echo "*** Compiling openMPI " ${OPENMPI_VERSION}
@@ -173,6 +182,9 @@ RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-
 ## Install python libraries for OLMT
 RUN pip3 install numpy
 RUN pip3 install netcdf4 scipy
+RUN pip2 install numpy configparser h5py scipy cython
+RUN pip2 install 'cftime==1.5.1'
+RUN pip2 install 'netCDF4==1.5.3'
 
 ## Install NCO for OLMT - installed with apt-get instead
 #RUN cd / \
