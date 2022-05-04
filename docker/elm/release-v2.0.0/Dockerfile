@@ -100,6 +100,6 @@ RUN cd / \
 
 ## Install OLMT tool into the container to use with site or ensemble simulations
 RUN cd /tools \
-    && git -c http.sslVerify=false clone https://github.com/FASSt-simulation/OLMT.git
+    && git -c http.sslVerify=false clone -b fasst_branch --single-branch --depth 1 https://github.com/FASSt-simulation/OLMT.git
 
 ## END
