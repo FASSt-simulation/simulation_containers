@@ -73,6 +73,7 @@ RUN tar -zxvf e3sm_v2.0.0.tar.gz \
     && cd /
 
 # Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
+RUN chown $USER:dockerusers /E3SM
 USER ${USER}
 RUN export USER=${USER}
 
