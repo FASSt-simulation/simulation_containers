@@ -243,3 +243,61 @@ singularity exec -B /data/Model_Data/cesm_input_datasets:/inputdata \
 -B /data2/Model_Output/olmt_test/:/output/  \
 containers/elm-builds_release-v1.2.0-latest.sif \
 /bin/sh -c 'cd  /output/cime_case_dirs/MYTEST_US-Dk3_ICB1850CNRDCTCBC_ad_spinup && ./case.submit'
+
+
+
+
+
+
+### Atempting to mimic with our own custom workflow setup. Use the non coupler bypass compset
+singularity exec -B /data/Model_Data/cesm_input_datasets:/inputdata \
+-B scripts:/scripts -B /data2/Model_Output/elm_runs/single_point:/output \
+containers/elm-builds_release-v2.0.0-latest.sif \
+/scripts/./create_newcase_elm_1pt_custom_site.sh --case_root=/output \
+--site_name=US-xTA --start_year='1901-01-01' --num_years=125 --output_vars=/scripts/output_vars.txt --output_freq=H \
+--met_start=1901 --met_end=2014 --compset=IGSWELMBGC --rmachine=modex
+
+singularity exec -B /data/Model_Data/cesm_input_datasets:/inputdata -B /data2/Model_Output/elm_runs/single_point:/output \
+containers/elm-builds_release-v2.0.0-latest.sif  /bin/sh -c 'cd /output/US-xTA.ELM.IGSWELMBGC.1652114023 && ./preview_namelists'
+
+singularity exec -B /data/Model_Data/cesm_input_datasets:/inputdata -B /data2/Model_Output/elm_runs/single_point:/output \
+containers/elm-builds_release-v2.0.0-latest.sif  /bin/sh -c 'cd /output/US-xTA.ELM.IGSWELMBGC.1652114023 && ./case.submit'
+
+
+
+
+
+
+
+
+# works
+singularity exec -B /data/Model_Data/cesm_input_datasets:/inputdata \
+-B simulation_containers/scripts/hlm-fates/elm_run_scripts/:/scripts \
+-B /data2/Model_Output/elm_runs/single_point:/output \
+containers/elm-builds_release-v2.0.0-latest.sif \
+/scripts/./create_newcase_elm_1pt_custom_site_spinup.sh --case_root=/output \
+--site_name=US-xTA --start_year='0001-01-01' --num_years=200 \
+--output_vars=/scripts/output_vars.txt --output_freq=H \
+--met_start=1901 --met_end=2014 --compset=IGSWELMBGC --rmachine=modex
+
+
+
+singularity exec -B /data/Model_Data/cesm_input_datasets:/inputdata -B /data2/Model_Output/elm_runs/single_point:/output \
+containers/elm-builds_release-v2.0.0-latest.sif  /bin/sh -c 'cd /output/US-xTA.ELM.IGSWELMBGC.1652114736.spinup && ./preview_namelists'
+
+singularity exec -B /data/Model_Data/cesm_input_datasets:/inputdata -B /data2/Model_Output/elm_runs/single_point:/output \
+containers/elm-builds_release-v2.0.0-latest.sif  /bin/sh -c 'cd /output/US-xTA.ELM.IGSWELMBGC.1652115294.spinup && ./case.submit'
+
+
+
+singularity exec -B /data/Model_Data/cesm_input_datasets:/inputdata \
+-B simulation_containers/scripts/hlm-fates/elm_run_scripts/:/scripts \
+-B /data2/Model_Output/elm_runs/single_point:/output \
+containers/elm-builds_release-v2.0.0-latest.sif \
+/scripts/./create_newcase_elm_1pt_custom_site_spinup.sh --case_root=/output \
+--site_name=US-xTA --start_year='0001-01-01' --num_years=200 \
+--output_vars=/scripts/output_vars.txt --output_freq=H \
+--met_start=1901 --met_end=2014 --compset=I1850GSWELMBGC --rmachine=modex
+
+# example batch submit.  need to make this flexible
+sbatch submit_job.sh US-xTA.ELM.I1850GSWELMBGC.1652115741.spinup
