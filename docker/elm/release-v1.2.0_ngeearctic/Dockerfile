@@ -16,7 +16,7 @@ ARG ELM_BRANCH='bsulman/lnd/NGEE-arctic-PFTs3'
 RUN echo $ELM_BRANCH
 
 # setting gmake
-RUN ln -s /usr/bin/make /usr/bin/gmake
+#RUN ln -s /usr/bin/make /usr/bin/gmake
 
 # Setup environment variables.  This is necessary for os.environ calls from case.py in CIME
 ENV USER=modeluser
@@ -46,7 +46,8 @@ RUN cd / \
     && chown $USER tools/cprnc \
     && chown $USER baselines \
     && chown $USER .cime \
-    && chown $USER /home/$USER/.cime
+    && chown $USER /home/$USER/.cime \
+    && cd /
 
 ## Checkout ELM model
 ## /root/.cime/config_machines.xml
@@ -70,7 +71,12 @@ RUN git -c http.sslVerify=false clone -b ${ELM_BRANCH} --single-branch --depth 1
     && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/docker/elm/cime_config_ngeearctic/config_machines.xml \
     && cd /
 
+# provide a symlink between ncap and ncap2 for OLMT
+RUN ln -s /usr/bin/ncap2 /usr/bin/ncap
+
 # Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
+RUN chown $USER:dockerusers -R /E3SM
+RUN chmod -R 777 /E3SM
 USER ${USER}
 RUN export USER=${USER}
 
@@ -109,8 +115,22 @@ RUN cd /E3SM/cime/scripts \
     && cd ${CASE_NAME} \
     && ./case.setup \
     && ./case.build
-    
+
+RUN echo "*** ELM test build completed successfully ***"
+
 ## Remove test build
 RUN cd / \
     && rm -rf /output/f19_g16.IGSWCLM45
+    
+## Install OLMT tool into the container to use with site or ensemble simulations
+RUN cd /tools \
+    && git -c http.sslVerify=false clone -b fasst_branch --single-branch --depth 1 https://github.com/FASSt-simulation/OLMT.git
+
+RUN chown $USER:dockerusers -R /tools/OLMT \
+    && chmod -R 777 /tools/OLMT
+
+USER ${USER}
+RUN export USER=${USER}
+#ENV USER=modeluser
+
 ## END
