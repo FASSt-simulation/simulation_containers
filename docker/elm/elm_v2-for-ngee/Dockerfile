@@ -14,6 +14,7 @@ LABEL maintainer.name="Shawn P. Serbin" \
 
 # where to get the ELM source code
 ENV REPOSITORY_URL=https://github.com/FASSt-simulation/simulation_containers
+ENV REPOSITORY_RAW_URL=https://raw.githubusercontent.com/FASSt-simulation/simulation_containers
 ENV USER=modeluser
 
 # Add new group, user, and user directory with user permissions
@@ -49,21 +50,20 @@ RUN cd / \
 ## For now, copy in source code instead of pulling into container; issues with github ssh and submodules
 ## https://www.geeksforgeeks.org/docker-copy-instruction/
 #COPY --chown=modeluser:dockerusers ./e3sm_source/e3sm_v2.0.0.tar.gz /.
-RUN wget $REPOSITORY_URL/raw/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2.0.0_ngee.tar.gz 
+RUN wget $REPOSITORY_URL/blob/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2.0.0_ngee.tar.gz
 RUN tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
     && rm e3sm_v2.0.0_ngee.tar.gz \
     && cd /E3SM \
     && git log \
     && git branch \
     && cd /.cime \
-    && echo $ELM_BRANCH \
-    && wget $REPOSITORY_URL/main/docker/elm/cime_config/config \
-    && wget $REPOSITORY_URL/main/docker/elm/cime_config/config_compilers.xml \
-    && wget $REPOSITORY_URL/main/docker/elm/cime_config/config_machines.xml \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_compilers.xml \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_machines.xml \
     && cd /home/$USER/.cime \
-    && wget $REPOSITORY_URL/main/docker/elm/cime_config/config \
-    && wget $REPOSITORY_URL/main/docker/elm/cime_config/config_compilers.xml \
-    && wget $REPOSITORY_URL/main/docker/elm/cime_config/config_machines.xml \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_compilers.xml \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_machines.xml \
     && cd /
 
 # Provide a symlink between ncap and ncap2 for OLMT 
