@@ -72,9 +72,9 @@ RUN tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
 # Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
 RUN ln -s /usr/bin/ncap2 /usr/bin/ncap \
     && chown $USER:dockerusers /E3SM \
-    && chmod -R 777 /E3SM \
-    && USER ${USER} \
-    && export USER=${USER}
+    && chmod -R 777 /E3SM
+USER ${USER}
+RUN export USER=${USER}
 
 ## Build example case as a test
 RUN cd /E3SM/cime/scripts \
