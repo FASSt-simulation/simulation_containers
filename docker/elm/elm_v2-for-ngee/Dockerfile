@@ -9,7 +9,7 @@ LABEL maintainer.name="Shawn P. Serbin" \
       author.name="Shawn P. Serbin" \
       author.email="sserbin@bnl.gov" \
       description="ELM host land model" \
-      version.hlm="v2.0.0" \
+      version.hlm="elm_v2-for-ngee" \
       version.baseos="gcc8.5"
 
 # where to get the ELM source code
@@ -50,7 +50,7 @@ RUN cd / \
 ## For now, copy in source code instead of pulling into container; issues with github ssh and submodules
 ## https://www.geeksforgeeks.org/docker-copy-instruction/
 #COPY --chown=modeluser:dockerusers ./e3sm_source/e3sm_v2.0.0.tar.gz /.
-RUN wget $REPOSITORY_URL/blob/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2.0.0_ngee.tar.gz
+RUN wget $REPOSITORY_URL/raw/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2.0.0_ngee.tar.gz
 RUN tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
     && rm e3sm_v2.0.0_ngee.tar.gz \
     && cd /E3SM \
@@ -60,10 +60,12 @@ RUN tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_compilers.xml \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_machines.xml \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/gnu_docker.cmake \
     && cd /home/$USER/.cime \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_compilers.xml \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_machines.xml \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/gnu_docker.cmake \
     && cd /
 
 # Provide a symlink between ncap and ncap2 for OLMT 

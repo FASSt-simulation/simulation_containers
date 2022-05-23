@@ -90,15 +90,15 @@ RUN export USER=${USER}
 #    && chown -R $USER:dockerusers /tools/cprnc
 
 # copy in some example scripts
-RUN cd scripts \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/1x1pt_US-Brw_test_case_e3sm.sh \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/1x1pt_US-Brw_test_case_e3sm_cpl_bypass.sh \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/output_vars.txt \
-    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/download_elm_singlesite_forcing_data.sh \
-    && chmod 775 1x1pt_US-Brw_test_case_e3sm_cpl_bypass.sh \
-    && chmod 775 1x1pt_US-Brw_test_case_e3sm.sh \
-    && chmod 775 output_vars.txt \   
-    && chmod 775 download_elm_singlesite_forcing_data.sh
+#RUN cd scripts \
+#    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/1x1pt_US-Brw_test_case_e3sm.sh \
+#    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/1x1pt_US-Brw_test_case_e3sm_cpl_bypass.sh \
+#    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/elm_run_scripts/output_vars.txt \
+#    && wget https://raw.githubusercontent.com/FASSt-simulation/simulation_containers/main/scripts/hlm-fates/download_elm_singlesite_forcing_data.sh \
+#    && chmod 775 1x1pt_US-Brw_test_case_e3sm_cpl_bypass.sh \
+#    && chmod 775 1x1pt_US-Brw_test_case_e3sm.sh \
+#    && chmod 775 output_vars.txt \   
+#    && chmod 775 download_elm_singlesite_forcing_data.sh
 
 ## Build example case as a test
 RUN cd /E3SM/cime/scripts \
