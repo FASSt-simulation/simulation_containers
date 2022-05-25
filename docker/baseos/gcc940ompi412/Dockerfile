@@ -67,6 +67,10 @@ RUN apt-get update -y \
     openssl \
     libncurses5-dev \
     libsqlite3-dev \
+    gsl-bin \
+    libgsl-dev \
+    flex \
+    nco \
     locales \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean all
@@ -102,7 +106,6 @@ RUN cd / \
     && ldconfig
 
 ## Compile Expat XML parser
-RUN echo "*** Compiling Expat XML parser"
 RUN cd / \
     && wget https://github.com/libexpat/libexpat/releases/download/R_2_4_7/expat-2.4.7.tar.bz2 \
     && tar -xvjf expat-2.4.7.tar.bz2 \
@@ -115,7 +118,6 @@ RUN cd / \
     && rm expat-2.4.7.tar.bz2
 
 ## HDF5 - use alternative source since main HDF5 source doesnt have useful download links
-RUN echo "*** Compiling HDF5 " ${HDF5_VERSION}
 #https://support.hdfgroup.org/ftp/HDF5/releases/
 RUN cd / \
     && mkdir -p /usr/local/hdf5 \
@@ -150,13 +152,12 @@ RUN cd / \
     && rm netcdf-c-4.8.1.tar.gz
 
 ## "Compile netCDF-Fortran"
-RUN echo "*** Compiling netCDF fortran " ${NETCDF_FORTRAN_VERSION}
 RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-4.5.4.tar.gz \
     && tar -zxvf netcdf-fortran-4.5.4.tar.gz \
     && cd netcdf-fortran-4.5.4 \
     && export NCDIR=/usr/local/netcdf \
     && export NFDIR=/usr/local/netcdf \
-    && CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=${NFDIR} --enable-parallel-tests \
+    && FC=mpif90 CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=${NFDIR} --enable-parallel-tests \
     && make \
     && make install \
     && cd / \
@@ -166,5 +167,8 @@ RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-
 ## Install python libraries for OLMT
 RUN pip3 install numpy
 RUN pip3 install netcdf4 scipy
+RUN pip2 install numpy configparser h5py scipy cython
+RUN pip2 install 'cftime==1.5.1'
+RUN pip2 install 'netCDF4==1.5.3'
 
 ### EOF
