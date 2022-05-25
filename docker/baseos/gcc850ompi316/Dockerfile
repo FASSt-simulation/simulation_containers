@@ -14,9 +14,6 @@ ARG OPENMPI_VERSION=3.1.6
 ARG HDF5_VERSION=1.12.1
 ARG NETCDF_VERSION=4.8.1
 ARG NETCDF_FORTRAN_VERSION=4.5.4
-#ARG NCO_VERSION=5.0.7
-# install Mariupol version of NCO
-#ARG NCO_VERSION=5.0.6
 
 # echo back options
 RUN echo $NCPUS \
@@ -95,14 +92,12 @@ ENV LANGUAGE en_US.UTF-8
 RUN locale -a
 
 ## get python2 pip
-RUN echo "*** Python2 PIP "
 RUN cd / \
     && curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py \
     && python2 get-pip.py \
     && cd /
 
 ## compile openMPI
-RUN echo "*** Compiling openMPI " ${OPENMPI_VERSION}
 RUN cd / \
     && wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${OPENMPI_VERSION}.tar.gz \
     && tar -zxvf openmpi-${OPENMPI_VERSION}.tar.gz \
@@ -118,7 +113,6 @@ RUN cd / \
     && ldconfig
 
 ## Compile Expat XML parser
-RUN echo "*** Compiling Expat XML parser"
 RUN cd / \
     && wget https://github.com/libexpat/libexpat/releases/download/R_2_4_7/expat-2.4.7.tar.bz2 \
     && tar -xvjf expat-2.4.7.tar.bz2 \
@@ -131,7 +125,6 @@ RUN cd / \
     && rm expat-2.4.7.tar.bz2
 
 ## HDF5 - use alternative source since main HDF5 source doesnt have useful download links
-RUN echo "*** Compiling HDF5 " ${HDF5_VERSION}
 #https://support.hdfgroup.org/ftp/HDF5/releases/
 RUN cd / \
     && mkdir -p /usr/local/hdf5 \
@@ -148,7 +141,6 @@ RUN cd / \
     && rm hdf5-1.12.1.tar.gz
 
 ## netCDF
-RUN echo "*** Compiling netCDF " ${NETCDF_VERSION}
 RUN cd / \
     && mkdir -p /usr/local/netcdf \
     && wget https://downloads.unidata.ucar.edu/netcdf-c/4.8.1/netcdf-c-4.8.1.tar.gz \
@@ -166,13 +158,12 @@ RUN cd / \
     && rm netcdf-c-4.8.1.tar.gz
 
 ## "Compile netCDF-Fortran"
-RUN echo "*** Compiling netCDF fortran " ${NETCDF_FORTRAN_VERSION}
 RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-4.5.4.tar.gz \
     && tar -zxvf netcdf-fortran-4.5.4.tar.gz \
     && cd netcdf-fortran-4.5.4 \
     && export NCDIR=/usr/local/netcdf \
     && export NFDIR=/usr/local/netcdf \
-    && CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=${NFDIR} --enable-parallel-tests \
+    && FC=mpif90 CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=${NFDIR} --enable-parallel-tests \
     && make \
     && make install \
     && cd / \
@@ -185,26 +176,5 @@ RUN pip3 install netcdf4 scipy
 RUN pip2 install numpy configparser h5py scipy cython
 RUN pip2 install 'cftime==1.5.1'
 RUN pip2 install 'netCDF4==1.5.3'
-
-## Install NCO for OLMT - installed with apt-get instead
-#RUN cd / \
-#    && git -c http.sslVerify=false clone -b ${NCO_VERSION} --single-branch --depth 1 https://github.com/nco/nco.git nco_build \
-#    && cd nco_build \
-#    && export NCDIR=/usr/local/netcdf \
-#    #&& CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=/nco \
-#    && CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --enable-udunits2 --enable-netcdf4 --enable-regex --enable-ncap2 --enable-gsl \
-#    && make \
-#    && make install \
-#    && cd / \
-#    && rm -rf nco_build
-
-#RUN export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-
-## Final cleanup
-#RUN cd / \
-#    && rm -r netcdf-c-${NETCDF_VERSION} \
-#    && rm netcdf-c-${NETCDF_VERSION}.tar.gz \
-#    && rm -r netcdf-fortran-${NETCDF_FORTRAN_VERSION} \
-#    && rm netcdf-fortran-${NETCDF_FORTRAN_VERSION}.tar.gz
 
 ### EOF
