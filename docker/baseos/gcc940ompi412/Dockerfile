@@ -168,9 +168,9 @@ RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-
 
 ## Install python libraries for OLMT
 RUN pip3 install numpy
-RUN pip3 install netcdf4 scipy
-RUN pip2 install numpy configparser h5py scipy cython
-RUN pip2 install 'cftime==1.5.1'
-RUN pip2 install 'netCDF4==1.5.3'
+RUN pip3 install netcdf4 scipy mpi4py
+#RUN pip2 install numpy configparser h5py scipy cython
+#RUN pip2 install 'cftime==1.5.1'
+#RUN pip2 install 'netCDF4==1.5.3'
 
 ### EOF
