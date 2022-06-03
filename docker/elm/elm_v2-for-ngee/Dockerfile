@@ -15,6 +15,7 @@ LABEL maintainer.name="Shawn P. Serbin" \
 # where to get the ELM source code
 ENV REPOSITORY_URL=https://github.com/FASSt-simulation/simulation_containers
 ENV REPOSITORY_RAW_URL=https://raw.githubusercontent.com/FASSt-simulation/simulation_containers
+ENV TOOLS_REPOSITORY_RAW_URL=https://raw.githubusercontent.com/FASSt-simulation/fasst_simulation_tools
 ENV USER=modeluser
 
 # Add new group, user, and user directory with user permissions
@@ -46,10 +47,6 @@ RUN cd / \
     && cd /
 
 ## Checkout ELM model
-## /root/.cime/config_machines.xml
-## For now, copy in source code instead of pulling into container; issues with github ssh and submodules
-## https://www.geeksforgeeks.org/docker-copy-instruction/
-#COPY --chown=modeluser:dockerusers ./e3sm_source/e3sm_v2.0.0.tar.gz /.
 RUN wget $REPOSITORY_URL/raw/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2.0.0_ngee.tar.gz
 RUN tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
     && rm e3sm_v2.0.0_ngee.tar.gz \
@@ -101,8 +98,15 @@ RUN cd / \
 ## Install OLMT tool into the container to use with site or ensemble simulations
 RUN cd /tools \
     && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch --depth 1 https://github.com/FASSt-simulation/OLMT.git \
+    && cp ./OLMT/examples/site_fullrun_userdata_docker.sh /scripts/OLMT_docker_example.sh \
     && chown $USER:dockerusers -R /tools/OLMT \
     && chmod -R 777 /tools/OLMT
+
+# Get Met Download Script into the container
+RUN cd /scripts \
+    && wget $TOOLS_REPOSITORY_RAW_URL/main/met_scripts/ngeearctic/download_elm_singlesite_forcing_data.sh \
+    && chown $USER:dockerusers download_elm_singlesite_forcing_data.sh \
+    && chmod -R 777 download_elm_singlesite_forcing_data.sh
 
 USER ${USER}
 RUN export USER=${USER}
