@@ -97,7 +97,8 @@ RUN cd / \
 
 ## Install OLMT tool into the container to use with site or ensemble simulations
 RUN cd /tools \
-    && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch --depth 1 https://github.com/FASSt-simulation/OLMT.git \
+#    && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch --depth 1 https://github.com/FASSt-simulation/OLMT.git \
+    && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch --depth 1 https://github.com/dmricciuto/OLMT.git \
     && cp ./OLMT/examples/site_fullrun_userdata_docker.sh /scripts/OLMT_docker_example.sh \
     && chown $USER:dockerusers -R /tools/OLMT \
     && chmod -R 777 /tools/OLMT
