@@ -63,15 +63,14 @@ RUN tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_compilers.xml \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_machines.xml \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/gnu_docker.cmake \
-    && cd /
-
-# Provide a symlink between ncap and ncap2 for OLMT 
-# Switch to using modeluser for test build (so it can find the ~/.cime docker machine configuration files)
-RUN ln -s /usr/bin/ncap2 /usr/bin/ncap \
+    && cd / \
+    && ln -s /usr/bin/ncap2 /usr/bin/ncap \
     && chown $USER:dockerusers /E3SM \
-    && chmod -R 777 /E3SM
+    && chmod -R 777 /E3SM \
+    && export USER=${USER}
+
+# Set user
 USER ${USER}
-RUN export USER=${USER}
 
 ## Build example case as a test
 RUN cd /E3SM/cime/scripts \
