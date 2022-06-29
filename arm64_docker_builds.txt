@@ -1,0 +1,13 @@
+# Sources:
+# https://matt-wxw.medium.com/build-docker-images-for-platform-arm64-apple-m1-and-amd64-on-apple-m1-with-docker-desktop-7c6dd5f7f325
+# https://andrewlock.net/creating-multi-arch-docker-images-for-arm64-from-windows/
+
+# Step 1. Create a new docker builder 
+docker buildx create --name multibuilder --use
+
+# Step 2. Change to local simulation_containers git repo directory
+cd /Users/sserbin/Data/GitHub/simulation_containers
+
+# Step 3. Build an ARM664 compliant version of the ELM docker. This is for local builds only
+docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64 \
+--platform linux/amd64 -f docker/elm/elm_v2-for-ngee/Dockerfile .
