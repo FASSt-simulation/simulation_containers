@@ -72,43 +72,49 @@ RUN tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
 # Set user
 USER ${USER}
 
-## Build example case as a test
-RUN cd /E3SM/cime/scripts \
-    && export CASE_NAME=/output/f19_g16.IGSWELMBGC \
-    && cd /E3SM/cime/scripts \
-    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWELMBGC --mach docker --compiler gnu \
-    && cd ${CASE_NAME} \
-    && ./xmlchange DATM_CLMNCEP_YR_END=1995 \
-    && ./xmlchange PIO_TYPENAME=netcdf \
-    && ./xmlchange RUNDIR=${PWD}/run \
-    && ./xmlchange EXEROOT=${PWD}/bld \
-    && ./xmlchange NTASKS=1 \
-    && ./xmlchange DIN_LOC_ROOT=$PWD \
-    && cd ${CASE_NAME} \
-    && ./case.setup \
-    && ./case.build
+## ------------------------------------------------------------------------------
+## Build example case as a test  --- only used with initial Docker build testing
+#RUN cd /E3SM/cime/scripts \
+#    && export CASE_NAME=/output/f19_g16.IGSWELMBGC \
+#    && cd /E3SM/cime/scripts \
+#    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWELMBGC --mach docker --compiler gnu \
+#    && cd ${CASE_NAME} \
+#    && ./xmlchange DATM_CLMNCEP_YR_END=1995 \
+#    && ./xmlchange PIO_TYPENAME=netcdf \
+#    && ./xmlchange RUNDIR=${PWD}/run \
+#    && ./xmlchange EXEROOT=${PWD}/bld \
+#    && ./xmlchange NTASKS=1 \
+#    && ./xmlchange DIN_LOC_ROOT=$PWD \
+#    && cd ${CASE_NAME} \
+#    && ./case.setup \
+#    && ./case.build
 
-RUN echo "*** ELM test build completed successfully ***"
+#RUN echo "*** ELM test build completed successfully ***"
 
 ## Remove test build
-RUN cd / \
-    && rm -rf /output/f19_g16.IGSWELMBGC
+#RUN cd / \
+#    && rm -rf /output/f19_g16.IGSWELMBGC
+## ------------------------------------------------------------------------------
 
 ## Install OLMT tool into the container to use with site or ensemble simulations
 RUN cd /tools \
     && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch --depth 1 https://github.com/dmricciuto/OLMT.git \
-    && cp ./OLMT/examples/site_fullrun_userdata_docker.sh /scripts/OLMT_docker_example.sh \
-    && chown $USER:dockerusers /scripts/OLMT_docker_example.sh \
-    && chmod +x /scripts/OLMT_docker_example.sh \
+#    && cp ./OLMT/examples/site_fullrun_userdata_docker.sh /scripts/OLMT_docker_example.sh \
+#    && chown $USER:dockerusers /scripts/OLMT_docker_example.sh \
+#    && chmod +x /scripts/OLMT_docker_example.sh \
     && chown $USER:dockerusers -R /tools/OLMT \
     && chmod -R 777 /tools/OLMT
 
-# Get Met Download Script into the container
+# Copy scripts into /scripts to make availible to users
 RUN cd /scripts \
     && wget $TOOLS_REPOSITORY_RAW_URL/main/met_scripts/ngeearctic/download_elm_singlesite_forcing_data.sh \
+    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_userdata_docker.sh \
+    && mv site_fullrun_userdata_docker.sh OLMT_docker_example.sh \
+    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_kougarok_example_docker.sh \
     && chown $USER:dockerusers download_elm_singlesite_forcing_data.sh \
     && chmod +x download_elm_singlesite_forcing_data.sh \
-    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_kougarok_example_docker.sh \
+    && chown $USER:dockerusers OLMT_docker_example.sh \
+    && chmod +x OLMT_docker_example.sh \
     && chown $USER:dockerusers /scripts/site_fullrun_kougarok_example_docker.sh \
     && chmod +x /scripts/site_fullrun_kougarok_example_docker.sh
 
