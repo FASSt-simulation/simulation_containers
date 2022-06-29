@@ -110,11 +110,15 @@ RUN cd /scripts \
     && wget $TOOLS_REPOSITORY_RAW_URL/main/met_scripts/ngeearctic/download_elm_singlesite_forcing_data.sh \
     && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_userdata_docker.sh \
     && mv site_fullrun_userdata_docker.sh OLMT_docker_example.sh \
+    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_userdata_docker_short.sh \
+    && mv site_fullrun_userdata_docker_short.sh OLMT_docker_example_short.sh \
     && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_kougarok_example_docker.sh \
     && chown $USER:dockerusers download_elm_singlesite_forcing_data.sh \
     && chmod +x download_elm_singlesite_forcing_data.sh \
     && chown $USER:dockerusers OLMT_docker_example.sh \
     && chmod +x OLMT_docker_example.sh \
+    && chown $USER:dockerusers OLMT_docker_example_short.sh \
+    && chmod +x OLMT_docker_example_short.sh \
     && chown $USER:dockerusers /scripts/site_fullrun_kougarok_example_docker.sh \
     && chmod +x /scripts/site_fullrun_kougarok_example_docker.sh
 
