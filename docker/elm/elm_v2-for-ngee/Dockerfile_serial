@@ -74,26 +74,26 @@ USER ${USER}
 
 ## ------------------------------------------------------------------------------
 ## Build example case as a test  --- only used with initial Docker build testing
-#RUN cd /E3SM/cime/scripts \
-#    && export CASE_NAME=/output/f19_g16.IGSWELMBGC \
-#    && cd /E3SM/cime/scripts \
-#    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWELMBGC --mach docker --compiler gnu \
-#    && cd ${CASE_NAME} \
-#    && ./xmlchange DATM_CLMNCEP_YR_END=1995 \
-#    && ./xmlchange PIO_TYPENAME=netcdf \
-#    && ./xmlchange RUNDIR=${PWD}/run \
-#    && ./xmlchange EXEROOT=${PWD}/bld \
-#    && ./xmlchange NTASKS=1 \
-#    && ./xmlchange DIN_LOC_ROOT=$PWD \
-#    && cd ${CASE_NAME} \
-#    && ./case.setup \
-#    && ./case.build
+RUN cd /E3SM/cime/scripts \
+    && export CASE_NAME=/output/f19_g16.IGSWELMBGC \
+    && cd /E3SM/cime/scripts \
+    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWELMBGC --mach docker --compiler gnu \
+    && cd ${CASE_NAME} \
+    && ./xmlchange DATM_CLMNCEP_YR_END=1995 \
+    && ./xmlchange PIO_TYPENAME=netcdf \
+    && ./xmlchange RUNDIR=${PWD}/run \
+    && ./xmlchange EXEROOT=${PWD}/bld \
+    && ./xmlchange NTASKS=1 \
+    && ./xmlchange DIN_LOC_ROOT=$PWD \
+    && cd ${CASE_NAME} \
+    && ./case.setup \
+    && ./case.build
 
-#RUN echo "*** ELM test build completed successfully ***"
+RUN echo "*** ELM test build completed successfully ***"
 
 ## Remove test build
-#RUN cd / \
-#    && rm -rf /output/f19_g16.IGSWELMBGC
+RUN cd / \
+    && rm -rf /output/f19_g16.IGSWELMBGC
 ## ------------------------------------------------------------------------------
 
 ## Install OLMT tool into the container to use with site or ensemble simulations
