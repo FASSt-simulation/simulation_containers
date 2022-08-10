@@ -99,9 +99,6 @@ USER ${USER}
 ## Install OLMT tool into the container to use with site or ensemble simulations
 RUN cd /tools \
     && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch --depth 1 https://github.com/dmricciuto/OLMT.git \
-#    && cp ./OLMT/examples/site_fullrun_userdata_docker.sh /scripts/OLMT_docker_example.sh \
-#    && chown $USER:dockerusers /scripts/OLMT_docker_example.sh \
-#    && chmod +x /scripts/OLMT_docker_example.sh \
     && chown $USER:dockerusers -R /tools/OLMT \
     && chmod -R 777 /tools/OLMT
 
@@ -113,6 +110,10 @@ RUN cd /scripts \
     && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_userdata_docker_short.sh \
     && mv site_fullrun_userdata_docker_short.sh OLMT_docker_example_short.sh \
     && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_kougarok_example_docker.sh \
+    # --- will be replacing above script with this new general script below
+    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/ngeearctic_site_fullrun_userdata_docker.sh \
+    && mv ngeearctic_site_fullrun_userdata_docker.sh OLMT_docker_example.sh \
+    # ---
     && chown $USER:dockerusers download_elm_singlesite_forcing_data.sh \
     && chmod +x download_elm_singlesite_forcing_data.sh \
     && chown $USER:dockerusers OLMT_docker_example.sh \
