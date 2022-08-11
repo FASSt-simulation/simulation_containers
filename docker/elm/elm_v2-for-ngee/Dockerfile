@@ -105,23 +105,12 @@ RUN cd /tools \
 # Copy scripts into /scripts to make availible to users
 RUN cd /scripts \
     && wget $TOOLS_REPOSITORY_RAW_URL/main/met_scripts/ngeearctic/download_elm_singlesite_forcing_data.sh \
-    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_userdata_docker.sh \
-    && mv site_fullrun_userdata_docker.sh OLMT_docker_example.sh \
-    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_userdata_docker_short.sh \
-    && mv site_fullrun_userdata_docker_short.sh OLMT_docker_example_short.sh \
-    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/site_fullrun_kougarok_example_docker.sh \
-    # --- will be replacing above script with this new general script below
     && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/ngeearctic_site_fullrun_userdata_docker.sh \
     && mv ngeearctic_site_fullrun_userdata_docker.sh OLMT_docker_example.sh \
-    # ---
     && chown $USER:dockerusers download_elm_singlesite_forcing_data.sh \
     && chmod +x download_elm_singlesite_forcing_data.sh \
     && chown $USER:dockerusers OLMT_docker_example.sh \
-    && chmod +x OLMT_docker_example.sh \
-    && chown $USER:dockerusers OLMT_docker_example_short.sh \
-    && chmod +x OLMT_docker_example_short.sh \
-    && chown $USER:dockerusers /scripts/site_fullrun_kougarok_example_docker.sh \
-    && chmod +x /scripts/site_fullrun_kougarok_example_docker.sh
+    && chmod +x OLMT_docker_example.sh
 
 USER ${USER}
 RUN export USER=${USER}
