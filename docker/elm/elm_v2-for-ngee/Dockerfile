@@ -47,8 +47,8 @@ RUN cd / \
     && cd /
 
 ## Checkout ELM model
-RUN wget $REPOSITORY_URL/raw/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2.0.0_ngee.tar.gz
-RUN tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
+RUN wget $REPOSITORY_URL/raw/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2.0.0_ngee.tar.gz \
+    && tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
     && rm e3sm_v2.0.0_ngee.tar.gz \
     && cd /E3SM \
     && git log \
