@@ -15,13 +15,6 @@ ARG HDF5_VERSION=1.12.1
 ARG NETCDF_VERSION=4.8.1
 ARG NETCDF_FORTRAN_VERSION=4.5.4
 
-# echo back options
-RUN echo $NCPUS \
-    && echo $OPENMPI_VERSION \
-    && echo $HDF5_VERSION \
-    && echo $NETCDF_VERSION \
-    && echo $NETCDF_FORTRAN_VERSION
-
 # set path variables
 ENV PATH=/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
@@ -140,7 +133,7 @@ RUN cd / \
     && rm -r hdf5-1.12.1 \
     && rm hdf5-1.12.1.tar.gz
 
-## netCDF
+## netCDF & netCDF-Fortran
 RUN cd / \
     && mkdir -p /usr/local/netcdf \
     && wget https://downloads.unidata.ucar.edu/netcdf-c/4.8.1/netcdf-c-4.8.1.tar.gz \
@@ -155,10 +148,8 @@ RUN cd / \
     && export LD_LIBRARY_PATH=/usr/local/netcdf/lib \
     && cd / \
     && rm -r netcdf-c-4.8.1 \
-    && rm netcdf-c-4.8.1.tar.gz
-
-## "Compile netCDF-Fortran"
-RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-4.5.4.tar.gz \
+    && rm netcdf-c-4.8.1.tar.gz \
+    && wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-4.5.4.tar.gz \
     && tar -zxvf netcdf-fortran-4.5.4.tar.gz \
     && cd netcdf-fortran-4.5.4 \
     && export NCDIR=/usr/local/netcdf \
@@ -171,11 +162,7 @@ RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-
     && rm netcdf-fortran-4.5.4.tar.gz
 
 ## Install python libraries for OLMT
-RUN pip3 install numpy
-RUN pip3 install netcdf4 scipy mpi4py
-RUN pip2 install numpy configparser h5py scipy cython
-RUN pip2 install 'cftime==1.5.1'
-RUN pip2 install 'netCDF4==1.5.3'
-RUN pip2 install mpi4py
+RUN pip3 install numpy netcdf4 scipy mpi4py
+RUN pip2 install numpy configparser h5py scipy cython 'cftime==1.5.1' 'netCDF4==1.5.3' mpi4py
 
 ### EOF
