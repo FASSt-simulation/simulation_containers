@@ -125,8 +125,7 @@ RUN cd / \
     && export LD_LIBRARY_PATH=/usr/local/hdf5/lib/libhdf5 \
     && cd / \
     && rm -r hdf5-1.12.1 \
-    && rm hdf5-1.12.1.tar.gz \
-    && ldconfig
+    && rm hdf5-1.12.1.tar.gz
 
 ## netCDF & netCDF-Fortran
 RUN cd / \
@@ -158,7 +157,9 @@ RUN cd / \
 
 ## Install python libraries for OLMT
 RUN pip3 install numpy scipy mpi4py netCDF4
-RUN pip3 install h5py configparser cftime 
-RUN echo "alias python=python3" >> ~/.bashrc
+RUN pip3 install h5py configparser cftime
+
+# Add symlink to python3 for running OLMT
+RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 ### EOF
