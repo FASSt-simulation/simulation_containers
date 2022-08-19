@@ -1,10 +1,9 @@
 # ----------------------------------------------------------------------
-# Debian container - gcc8.5
+# Debian container - gcc8.5. ARM64 version
 # E3SM/ELM land model docker container
 # ----------------------------------------------------------------------
 
 FROM fasstsimulation/baseos:gcc850ompi316_arm64
-#FROM fasstsimulation/baseos:gcc850ompi316-latest
 LABEL maintainer.name="Shawn P. Serbin" \
       maintainer.email="sserbin@bnl.gov" \
       author.name="Shawn P. Serbin" \
@@ -52,8 +51,9 @@ RUN wget $REPOSITORY_URL/raw/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2
     && tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
     && rm e3sm_v2.0.0_ngee.tar.gz \
     && cd /E3SM \
-    && git log \
-    && git branch \
+    && cd /E3SM/cime_config/machines/cmake_macros \
+    && rm gnu.cmake \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/gnu.cmake \
     && cd /.cime \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_compilers.xml \
@@ -75,26 +75,26 @@ USER ${USER}
 
 ## ------------------------------------------------------------------------------
 ## Build example case as a test  --- only used with initial Docker build testing
-#RUN cd /E3SM/cime/scripts \
-#    && export CASE_NAME=/output/f19_g16.IGSWELMBGC \
-#    && cd /E3SM/cime/scripts \
-#    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWELMBGC --mach docker --compiler gnu \
-#    && cd ${CASE_NAME} \
-#    && ./xmlchange DATM_CLMNCEP_YR_END=1995 \
-#    && ./xmlchange PIO_TYPENAME=netcdf \
-#    && ./xmlchange RUNDIR=${PWD}/run \
-#    && ./xmlchange EXEROOT=${PWD}/bld \
-#    && ./xmlchange NTASKS=1 \
-#    && ./xmlchange DIN_LOC_ROOT=$PWD \
-#    && cd ${CASE_NAME} \
-#    && ./case.setup \
-#    && ./case.build
+RUN cd /E3SM/cime/scripts \
+    && export CASE_NAME=/output/f19_g16.IGSWELMBGC \
+    && cd /E3SM/cime/scripts \
+    && ./create_newcase --case ${CASE_NAME} --res f19_g16 --compset IGSWELMBGC --mach docker --compiler gnu \
+    && cd ${CASE_NAME} \
+    && ./xmlchange DATM_CLMNCEP_YR_END=1995 \
+    && ./xmlchange PIO_TYPENAME=netcdf \
+    && ./xmlchange RUNDIR=${PWD}/run \
+    && ./xmlchange EXEROOT=${PWD}/bld \
+    && ./xmlchange NTASKS=1 \
+    && ./xmlchange DIN_LOC_ROOT=$PWD \
+    && cd ${CASE_NAME} \
+    && ./case.setup \
+    && ./case.build
 
-#RUN echo "*** ELM test build completed successfully ***"
+RUN echo "*** ELM test build completed successfully ***"
 
 ## Remove test build
-#RUN cd / \
-#    && rm -rf /output/f19_g16.IGSWELMBGC
+RUN cd / \
+    && rm -rf /output/f19_g16.IGSWELMBGC
 ## ------------------------------------------------------------------------------
 
 ## Install OLMT tool into the container to use with site or ensemble simulations
@@ -115,5 +115,5 @@ RUN cd /scripts \
 
 USER ${USER}
 RUN export USER=${USER}
-#RUN echo "alias python=python3" >> ~/.bashrc
+
 ## END
