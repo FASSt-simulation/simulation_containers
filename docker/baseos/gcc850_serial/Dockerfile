@@ -1,5 +1,6 @@
 # ----------------------------------------------------------------------
 # Debian baseOS docker container to use with ELM/CTSM builds
+# AMD64 version
 # ----------------------------------------------------------------------
 
 FROM gcc:8.5
@@ -10,17 +11,14 @@ LABEL maintainer.name="Shawn P. Serbin" \
       description="GCC-based image loaded with necessary dependencies for building HLM/HLM-FATES images"
 
 # Set a few variables that can be used to control the docker build
+# Set a few variables that can be used to control the docker build
+# TODO: actually use these to allow for argument builds OR
+# remove if its not relevant
 ARG OPENMPI_VERSION=3.1.6
+ARG EXPAT_VERSION=2.4.7
 ARG HDF5_VERSION=1.12.1
 ARG NETCDF_VERSION=4.8.1
 ARG NETCDF_FORTRAN_VERSION=4.5.4
-
-# echo back options
-RUN echo $NCPUS \
-    && echo $OPENMPI_VERSION \
-    && echo $HDF5_VERSION \
-    && echo $NETCDF_VERSION \
-    && echo $NETCDF_FORTRAN_VERSION
 
 # set path variables
 ENV PATH=/usr/local/bin:$PATH
@@ -29,6 +27,7 @@ ENV PATH=/usr/local/hdf5/bin:$PATH
 ENV PATH=/usr/local/netcdf/bin:$PATH
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/hdf5/lib
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/netcdf/lib
+ENV HDF5_DIR=/usr/local/hdf5
 
 # Update the system and install initial dependencies
 RUN apt-get update -y \
@@ -57,8 +56,6 @@ RUN apt-get update -y \
     libudunits2-0 \
     libudunits2-dev \
     udunits-bin \
-    python2 \
-    python2-dev \
     python3 \
     python3-dev \
     python3-pip \
@@ -90,12 +87,6 @@ ENV LANGUAGE en_US.UTF-8
 
 ## check locales
 RUN locale -a
-
-## get python2 pip
-RUN cd / \
-    && curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py \
-    && python2 get-pip.py \
-    && cd /
 
 ## compile openMPI
 RUN cd / \
@@ -140,7 +131,7 @@ RUN cd / \
     && rm -r hdf5-1.12.1 \
     && rm hdf5-1.12.1.tar.gz
 
-## netCDF
+## netCDF & netCDF-Fortran
 RUN cd / \
     && mkdir -p /usr/local/netcdf \
     && wget https://downloads.unidata.ucar.edu/netcdf-c/4.8.1/netcdf-c-4.8.1.tar.gz \
@@ -155,10 +146,8 @@ RUN cd / \
     && export LD_LIBRARY_PATH=/usr/local/netcdf/lib \
     && cd / \
     && rm -r netcdf-c-4.8.1 \
-    && rm netcdf-c-4.8.1.tar.gz
-
-## "Compile netCDF-Fortran"
-RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-4.5.4.tar.gz \
+    && rm netcdf-c-4.8.1.tar.gz \
+    && wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-4.5.4.tar.gz \
     && tar -zxvf netcdf-fortran-4.5.4.tar.gz \
     && cd netcdf-fortran-4.5.4 \
     && export NCDIR=/usr/local/netcdf \
@@ -171,11 +160,11 @@ RUN wget https://downloads.unidata.ucar.edu/netcdf-fortran/4.5.4/netcdf-fortran-
     && rm netcdf-fortran-4.5.4.tar.gz
 
 ## Install python libraries for OLMT
-RUN pip3 install numpy
-RUN pip3 install netcdf4 scipy mpi4py
-RUN pip2 install numpy configparser h5py scipy cython
-RUN pip2 install 'cftime==1.5.1'
-RUN pip2 install 'netCDF4==1.5.3'
-RUN pip2 install mpi4py
+RUN pip3 install wheel
+RUN pip3 install numpy scipy mpi4py netCDF4
+RUN pip3 install h5py configparser cftime
+
+# Add symlink to python3 for running OLMT
+RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 ### EOF
