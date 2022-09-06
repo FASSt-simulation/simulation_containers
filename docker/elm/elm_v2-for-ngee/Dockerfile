@@ -1,6 +1,7 @@
 # ----------------------------------------------------------------------
 # Debian container - gcc8.5
 # E3SM/ELM land model docker container
+# AMD64 version
 # ----------------------------------------------------------------------
 
 FROM fasstsimulation/baseos:gcc850ompi316-latest
@@ -98,15 +99,10 @@ USER ${USER}
 
 ## Install OLMT tool into the container to use with site or ensemble simulations
 RUN cd /tools \
-#    && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch --depth 1 https://github.com/dmricciuto/OLMT.git \
-#    && chown $USER:dockerusers -R /tools/OLMT \
-#    && chmod -R 777 /tools/OLMT
-# !! temporary fix for OLMT until scaling options are complete !!
-#    && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch --depth 10 https://github.com/dmricciuto/OLMT.git \
-# !! removing depth argument !!
     && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch https://github.com/dmricciuto/OLMT.git \
     && cd OLMT/ \
-    && git reset --hard 'd1c1bb170777ccab59b0b84780da53278167df89' \
+    # add specific git commit as src
+    && git reset --hard '6284829d39dc4264989d7bfe8478345b2d749524' \
     && chown $USER:dockerusers -R /tools/OLMT \
     && chmod -R 777 /tools/OLMT
 
