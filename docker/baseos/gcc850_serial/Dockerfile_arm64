@@ -1,5 +1,6 @@
 # ----------------------------------------------------------------------
 # Debian baseOS docker container to use with ELM/CTSM builds
+# non-parallel versions of HDF5 and netCDF for running OLMT ensembles
 # ARM64 version
 # ----------------------------------------------------------------------
 
@@ -10,6 +11,7 @@ LABEL maintainer.name="Shawn P. Serbin" \
       author.email="sserbin@bnl.gov" \
       description="GCC-based image loaded with necessary dependencies for building HLM/HLM-FATES images"
 
+# Set a few variables that can be used to control the docker build
 # Set a few variables that can be used to control the docker build
 # TODO: actually use these to allow for argument builds OR
 # remove if its not relevant
@@ -121,7 +123,7 @@ RUN cd / \
     && wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.1/src/hdf5-1.12.1.tar.gz \
     && tar -zxvf hdf5-1.12.1.tar.gz \
     && cd hdf5-1.12.1 \
-    && CC=mpicc ./configure --enable-fortran --enable-parallel --prefix=/usr/local/hdf5 \
+    && ./configure --enable-fortran --prefix=/usr/local/hdf5 \
     && make \
     && make install \
     && export PATH=/usr/local/hdf5/bin:$PATH \
@@ -138,7 +140,7 @@ RUN cd / \
     && cd netcdf-c-4.8.1 \
     && export H5DIR=/usr/local/hdf5 \
     && export NCDIR=/usr/local/netcdf \
-    && CC=mpicc CPPFLAGS=-I${H5DIR}/include LDFLAGS=-L${H5DIR}/lib ./configure --enable-parallel-tests --prefix=${NCDIR} \
+    && CPPFLAGS=-I${H5DIR}/include LDFLAGS=-L${H5DIR}/lib ./configure --prefix=${NCDIR} \
     && make \
     && make install \
     && export PATH=/usr/local/netcdf/bin:$PATH \
@@ -151,7 +153,7 @@ RUN cd / \
     && cd netcdf-fortran-4.5.4 \
     && export NCDIR=/usr/local/netcdf \
     && export NFDIR=/usr/local/netcdf \
-    && FC=mpif90 CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=${NFDIR} --enable-parallel-tests \
+    && CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=${NFDIR} \
     && make \
     && make install \
     && cd / \
