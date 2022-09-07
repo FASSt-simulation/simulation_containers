@@ -1,5 +1,6 @@
 # ----------------------------------------------------------------------
 # Debian baseOS docker container to use with ELM/CTSM builds
+# non-parallel versions of HDF5 and netCDF for running OLMT ensembles
 # AMD64 version
 # ----------------------------------------------------------------------
 
