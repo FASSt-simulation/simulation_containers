@@ -52,8 +52,6 @@ RUN wget $REPOSITORY_URL/raw/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2
     && tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
     && rm e3sm_v2.0.0_ngee.tar.gz \
     && cd /E3SM \
-    && git log \
-    && git branch \
     && cd /.cime \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config/config_compilers.xml \
@@ -98,6 +96,7 @@ USER ${USER}
 ## ------------------------------------------------------------------------------
 
 ## Install OLMT tool into the container to use with site or ensemble simulations
+# This uses a stable release of the Arctic-userpft branch of OLMT
 RUN cd /tools \
     && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch https://github.com/dmricciuto/OLMT.git \
     && cd OLMT/ \

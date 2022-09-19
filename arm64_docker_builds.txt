@@ -2,6 +2,35 @@
 # https://matt-wxw.medium.com/build-docker-images-for-platform-arm64-apple-m1-and-amd64-on-apple-m1-with-docker-desktop-7c6dd5f7f325
 # https://andrewlock.net/creating-multi-arch-docker-images-for-arm64-from-windows/
 
+#### Build the ARM64 compliant baseOS image (e.g. gcc850 w/ open-mpi 3.1.6)
+# Step 1. Create a new docker builder (only needs to be done once)
+docker buildx create --name multibuilder --use
+
+# Step 2. Change to local simulation_containers git repo directory
+cd /Users/sserbin/Data/GitHub/simulation_containers
+
+# Step 3. Build an ARM64 compliant version of the baseOS container. This is for local builds only
+docker buildx build --push -t fasstsimulation/baseos:gcc850ompi316_arm64 \
+--no-cache --platform linux/arm64 -f docker/baseos/gcc850ompi316/Dockerfile_arm64 .
+
+
+#### Build the latest ARM64 compliant ELM container - based on an ARM64 compliant baseOS image
+# Step 1. Create a new docker builder 
+docker buildx create --name multibuilder --use
+
+# Step 2. Change to local simulation_containers git repo directory
+cd /Users/sserbin/Data/GitHub/simulation_containers
+
+# Step 3a. Build an ARM64 compliant version of the ELM docker. This is for local builds only
+docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64 --no-cache  \
+--platform linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_arm64 .
+
+# Step 3b. Build AMD64 and ARM64 compliant version of the ELM docker. This is for local builds only
+docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64 --no-cache  \
+--platform linux/amd64,linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_arm64 .
+
+
+#### Build the STABLE RELEASE ARM64 compliant ELM container - based on an ARM64 compliant baseOS image
 # Step 1. Create a new docker builder 
 docker buildx create --name multibuilder --use
 
@@ -9,9 +38,21 @@ docker buildx create --name multibuilder --use
 cd /Users/sserbin/Data/GitHub/simulation_containers
 
 # Step 3. Build an ARM64 compliant version of the ELM docker. This is for local builds only
-docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64 \
---platform linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile .
+docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64_stable --no-cache  \
+--platform linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_arm64_stable .
 
-# Step 3b. Build AMD64 and ARM64 compliant version of the ELM docker. This is for local builds only
-docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64 \
---platform linux/amd64,linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile .
+
+#### Build a multi-platform version of the jupyter-lab simulation_container
+# Step 1. Create a new docker builder  (only needs to be done once)
+docker buildx create --name multibuilder --use
+
+# Step 2. Change to local simulation_containers git repo directory
+cd /Users/sserbin/Data/GitHub/fasst_simulation_tools
+
+# Step 3. Build an AMD64+ARM64 compliant version of the simulation_container (version 3.3.2, src AMD/ARM compliant)
+# https://hub.docker.com/r/jupyter/base-notebook/tags/?page=1&name=3.3.2
+docker buildx build --push -t fasstsimulation/fasst_simulation_tools:fasst_jupyterlab_3.3.2 --no-cache  \
+--platform linux/amd64,linux/arm64 -f docker/jupyter/Dockerfile_lab_3.3.2 .
+
+# Step 3. Build an AMD64+ARM64 compliant version of the simulation_container (version 3.4.0, src AMD/ARM compliant)
+# https://hub.docker.com/r/jupyter/base-notebook/tags?page=1&name=3.4.0
