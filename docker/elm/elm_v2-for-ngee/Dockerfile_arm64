@@ -100,7 +100,7 @@ USER ${USER}
 ## Install OLMT tool into the container to use with site or ensemble simulations
 # This uses the latest (bleeding edge) version of the Arctic-userpft branch of OLMT
 RUN cd /tools \
-    && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch --depth 1 https://github.com/dmricciuto/OLMT.git \
+    && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch https://github.com/dmricciuto/OLMT.git \
     && chown $USER:dockerusers -R /tools/OLMT \
     && chmod -R 777 /tools/OLMT
 

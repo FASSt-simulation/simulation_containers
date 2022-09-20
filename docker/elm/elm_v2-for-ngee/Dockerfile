@@ -101,7 +101,8 @@ RUN cd /tools \
     && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch https://github.com/dmricciuto/OLMT.git \
     && cd OLMT/ \
     # add specific git commit as src
-    && git reset --hard '6284829d39dc4264989d7bfe8478345b2d749524' \
+    #&& git reset --hard '6284829d39dc4264989d7bfe8478345b2d749524' \
+    && git reset --hard '18acdfbf7a67be2df125f5ea0a3ff9d5a70986df' \
     && chown $USER:dockerusers -R /tools/OLMT \
     && chmod -R 777 /tools/OLMT
 
