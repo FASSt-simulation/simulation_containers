@@ -41,7 +41,6 @@ cd /Users/sserbin/Data/GitHub/simulation_containers
 docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64_stable --no-cache  \
 --platform linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_arm64_stable .
 
-
 #### Build a multi-platform version of the jupyter-lab simulation_container
 # Step 1. Create a new docker builder  (only needs to be done once)
 docker buildx create --name multibuilder --use
@@ -49,10 +48,58 @@ docker buildx create --name multibuilder --use
 # Step 2. Change to local simulation_containers git repo directory
 cd /Users/sserbin/Data/GitHub/fasst_simulation_tools
 
-# Step 3. Build an AMD64+ARM64 compliant version of the simulation_container (version 3.3.2, src AMD/ARM compliant)
+# Step 3a. Build an AMD64+ARM64 compliant version of the simulation_container (version 3.3.2, src AMD/ARM compliant)
 # https://hub.docker.com/r/jupyter/base-notebook/tags/?page=1&name=3.3.2
 docker buildx build --push -t fasstsimulation/fasst_simulation_tools:fasst_jupyterlab_3.3.2 --no-cache  \
 --platform linux/amd64,linux/arm64 -f docker/jupyter/Dockerfile_lab_3.3.2 .
 
+# Step 3b. Build an AMD64+ARM64 compliant version of the simulation_container (version 3.3.2, src AMD/ARM compliant)
+# Google Earth Engine version
+docker buildx build --push -t fasstsimulation/fasst_simulation_tools:fasst_jupyterlab_gee_3.3.2 --no-cache  \
+--platform linux/amd64,linux/arm64 -f docker/jupyter/Dockerfile_lab_gee_3.3.2 .
+
+# Step 4a. Add example notebook scripts to fasst_jupyterlab_3.3.2 container and label as "elmlab_3.3.2"
+docker buildx build --push -t fasstsimulation/fasst_simulation_tools:elmlab_3.3.2 --no-cache  \
+--platform linux/amd64,linux/arm64 -f docker/jupyter/Dockerfile_elmlab_3.3.2 .
+
+# Step 4b. Add example notebook scripts to fasst_jupyterlab_3.3.2 container and label as "elmlab_3.3.2"
+# Google Earth Engine version
+docker buildx build --push -t fasstsimulation/fasst_simulation_tools:elmlab_gee_3.3.2 --no-cache  \
+--platform linux/amd64,linux/arm64 -f docker/jupyter/Dockerfile_elmlab_gee_3.3.2 .
+
+
+
+
+
+
+
+
+
+
+###### !!!! OLDER INSTRUCTIONS !!!!!
+#### Build a multi-platform version of the jupyter-lab simulation_container
+# Step 1. Create a new docker builder  (only needs to be done once)
+docker buildx create --name multibuilder --use
+
+# Step 2. Change to local simulation_containers git repo directory
+cd /Users/sserbin/Data/GitHub/fasst_simulation_tools
+
+# Step 3a. Build an AMD64+ARM64 compliant version of the simulation_container (version 3.3.2, src AMD/ARM compliant)
+# https://hub.docker.com/r/jupyter/base-notebook/tags/?page=1&name=3.3.2
+docker buildx build --push -t fasstsimulation/fasst_simulation_tools:fasst_jupyterlab_3.3.2 --no-cache  \
+--platform linux/amd64,linux/arm64 -f docker/jupyter/Dockerfile_lab_3.3.2 .
+
+# Step 3b. Build an AMD64+ARM64 compliant version of the simulation_container (version 3.3.2, src AMD/ARM compliant)
+# https://hub.docker.com/r/jupyter/base-notebook/tags/?page=1&name=3.3.2
+# With Google Earth Engine and GEEmap
+docker buildx build --push -t fasstsimulation/fasst_simulation_tools:fasst_jupyterlab_3.3.2_gee --no-cache  \
+--platform linux/amd64,linux/arm64 -f docker/jupyter/Dockerfile_lab_gee_3.3.2 .
+
 # Step 3. Build an AMD64+ARM64 compliant version of the simulation_container (version 3.4.0, src AMD/ARM compliant)
 # https://hub.docker.com/r/jupyter/base-notebook/tags?page=1&name=3.4.0
+
+# !!! 
+# Step 3a. Build an AMD64+ARM64 compliant version of the simulation_container (version 3.3.2, src AMD/ARM compliant)
+# Alternative Step - add new scripts to jupyter-lab container without rebuilding the full container
+docker buildx build --push -t fasstsimulation/fasst_simulation_tools:elmlab_3.3.2 --no-cache  \
+--platform linux/amd64,linux/arm64 -f docker/jupyter/Dockerfile_elmlab_3.3.2 .
