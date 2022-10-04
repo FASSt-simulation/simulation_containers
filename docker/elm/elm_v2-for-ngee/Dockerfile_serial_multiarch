@@ -120,10 +120,10 @@ RUN cd /scripts \
     && chown $USER:dockerusers OLMT_ens_docker_example.sh \
     && chmod +x OLMT_docker_example.sh \
     && chmod +x OLMT_ens_docker_example.sh \
-    # download and copy OLMT ens param list example
-    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/param_list_example_ngeearctic \
-    && chown $USER:dockerusers param_list_example_ngeearctic \
-    && cp param_list_example_ngeearctic /tools/OLMT/examples/param_list_example_ngeearctic
+    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/param_list_example_kougarok \
+    && chown $USER:dockerusers param_list_example_kougarok \
+    && wget $TOOLS_REPOSITORY_RAW_URL/main/elm_scripts/ngeearctic_elm_scripts/olmt_scripts/param_list_example_beo \
+    && chown $USER:dockerusers param_list_example_beo \
     && cd /
 
 USER ${USER}
