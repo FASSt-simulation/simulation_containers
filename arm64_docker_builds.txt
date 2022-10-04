@@ -30,8 +30,6 @@ docker buildx build --push -t fasstsimulation/baseos:gcc850ompi316-serial_multia
 --no-cache --platform linux/amd64,linux/arm64 -f docker/baseos/gcc850_serial/Dockerfile .
 
 
-
-
 #### Build the latest ARM64 compliant ELM container - based on an ARM64 compliant baseOS image
 # Step 1. Create a new docker builder 
 docker buildx create --name multibuilder --use
@@ -43,25 +41,14 @@ cd /Users/sserbin/Data/GitHub/simulation_containers
 docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64 --no-cache  \
 --platform linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_arm64 .
 
-# Step 3b. Build AMD64 and ARM64 compliant version of the ELM docker. This is for local builds only
-docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64 --no-cache  \
---platform linux/amd64,linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_arm64 .
-
-
-#### Build the STABLE RELEASE ARM64 compliant ELM container - based on an ARM64 compliant baseOS image
-# Step 1. Create a new docker builder 
-docker buildx create --name multibuilder --use
-
-# Step 2. Change to local simulation_containers git repo directory
-cd /Users/sserbin/Data/GitHub/simulation_containers
-
-# Step 3. Build an ARM64 compliant version of the ELM docker. This is for local builds only
-docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64_stable --no-cache  \
---platform linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_arm64_stable .
-
-#### Build multi-arch ELM
+# Step 3b. Build multi-arch ELM
 docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_multiarch --no-cache  \
 --platform linux/amd64,linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_multiarch .
+
+# Step 3c. Build AMD64 and ARM64 compliant version of the serial lib ELM docker. This is for local builds only
+docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee-serial_multiarch --no-cache  \
+--platform linux/amd64,linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_serial_multiarch .
+
 
 
 #### Build a multi-platform version of the jupyter-lab simulation_container
@@ -89,6 +76,43 @@ docker buildx build --push -t fasstsimulation/fasst_simulation_tools:elmlab_3.3.
 # Google Earth Engine version
 docker buildx build --push -t fasstsimulation/fasst_simulation_tools:elmlab_gee_3.3.2 --no-cache  \
 --platform linux/amd64,linux/arm64 -f docker/jupyter/Dockerfile_elmlab_gee_3.3.2 .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Build the STABLE RELEASE ARM64 compliant ELM container - based on an ARM64 compliant baseOS image
+# Step 1. Create a new docker builder 
+docker buildx create --name multibuilder --use
+
+# Step 2. Change to local simulation_containers git repo directory
+cd /Users/sserbin/Data/GitHub/simulation_containers
+
+# Step 3. Build an ARM64 compliant version of the ELM docker. This is for local builds only
+docker buildx build --push -t fasstsimulation/elm-builds:elm_v2-for-ngee_arm64_stable --no-cache  \
+--platform linux/arm64 -f docker/elm/elm_v2-for-ngee/Dockerfile_arm64_stable .
+
+
+
+
+
+
+
+
 
 
 

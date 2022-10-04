@@ -2,7 +2,7 @@
 # Debian container - gcc8.5
 # E3SM/ELM land model docker container
 # non-parallel version of HDF5 and netCDF for running OLMT ensembles
-# AMD64 version
+# AMD64/ARM64 version
 # ----------------------------------------------------------------------
 
 FROM fasstsimulation/baseos:gcc850ompi316-serial_multiarch
@@ -53,8 +53,9 @@ RUN wget $REPOSITORY_URL/raw/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2
     && tar -zxvf e3sm_v2.0.0_ngee.tar.gz \
     && rm e3sm_v2.0.0_ngee.tar.gz \
     && cd /E3SM \
-    && git log \
-    && git branch \
+    && cd /E3SM/cime_config/machines/cmake_macros \
+    && rm gnu.cmake \
+    && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config_serial/gnu.cmake \
     && cd /.cime \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config_serial/config \
     && wget $REPOSITORY_RAW_URL/main/docker/elm/cime_config_serial/config_compilers.xml \
