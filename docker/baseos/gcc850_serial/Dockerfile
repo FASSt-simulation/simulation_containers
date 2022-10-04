@@ -12,7 +12,6 @@ LABEL maintainer.name="Shawn P. Serbin" \
       description="GCC-based image loaded with necessary dependencies for building HLM/HLM-FATES images"
 
 # Set a few variables that can be used to control the docker build
-# Set a few variables that can be used to control the docker build
 # TODO: actually use these to allow for argument builds OR
 # remove if its not relevant
 ARG OPENMPI_VERSION=3.1.6
